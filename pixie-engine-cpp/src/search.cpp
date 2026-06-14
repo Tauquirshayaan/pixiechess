@@ -114,8 +114,14 @@ void pick_next_move(MoveList& ml, int start_index) {
 }
 
 // --- QUIESCENCE SEARCH ---
-int quiescence(Board& b, int alpha, int beta, int qs_depth = 0) {
+int quiescence(Board& b, int alpha, int beta, int ply, int qs_depth = 0) {
     if (search_stop_flag.load(std::memory_order_relaxed)) return 0;
+    
+    // Immediate game over check: missing Kings
+    U64 us_king = b.pieces[b.side_to_move][KING] | b.pieces[b.side_to_move][ROCKETMAN];
+    U64 them_king = b.pieces[b.side_to_move == WHITE ? BLACK : WHITE][KING] | b.pieces[b.side_to_move == WHITE ? BLACK : WHITE][ROCKETMAN];
+    if (!us_king) return -MATE_VALUE + ply;
+    if (!them_king) return MATE_VALUE - ply;
     
     int stand_pat = evaluate(b);
     
@@ -142,7 +148,7 @@ int quiescence(Board& b, int alpha, int beta, int qs_depth = 0) {
             continue; // Illegal move
         }
         
-        int score = -quiescence(b, -beta, -alpha, qs_depth + 1);
+        int score = -quiescence(b, -beta, -alpha, ply + 1, qs_depth + 1);
         b.undo_move(m);
         
         if (score >= beta) return beta;
@@ -156,6 +162,12 @@ int quiescence(Board& b, int alpha, int beta, int qs_depth = 0) {
 int alpha_beta(Board& b, int depth, int alpha, int beta, int ply, ThreadData* td) {
     if (search_stop_flag.load(std::memory_order_relaxed)) return 0;
 
+    // Immediate game over check: missing Kings
+    U64 us_king = b.pieces[b.side_to_move][KING] | b.pieces[b.side_to_move][ROCKETMAN];
+    U64 them_king = b.pieces[b.side_to_move == WHITE ? BLACK : WHITE][KING] | b.pieces[b.side_to_move == WHITE ? BLACK : WHITE][ROCKETMAN];
+    if (!us_king) return -MATE_VALUE + ply;
+    if (!them_king) return MATE_VALUE - ply;
+
     int tt_score;
     Move tt_move = Move(0,0,0,0,0,0,0);
     if (TT::probe(b.hash, depth, alpha, beta, tt_score, tt_move)) {
@@ -163,7 +175,7 @@ int alpha_beta(Board& b, int depth, int alpha, int beta, int ply, ThreadData* td
     }
 
     if (depth <= 0) {
-        int q = quiescence(b, alpha, beta, 0);
+        int q = quiescence(b, alpha, beta, ply, 0);
         TT::store(b.hash, 0, q, TT_EXACT, Move(0,0,0,0,0,0,0));
         return q;
     }

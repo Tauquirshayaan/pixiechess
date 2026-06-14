@@ -46,7 +46,7 @@ if ! id "${SERVICE_USER}" &>/dev/null; then
     useradd --system --shell /bin/false --home-dir "${DEPLOY_DIR}" "${SERVICE_USER}"
 fi
 mkdir -p "${DEPLOY_DIR}"
-chown "${SERVICE_USER}:${SERVICE_USER}" "${DEPLOY_DIR}"
+chown -R "${SERVICE_USER}:${SERVICE_USER}" "${DEPLOY_DIR}"
 
 # ── Step 4: Build C++ Engine natively on this machine ───────────────────────
 echo ""
@@ -100,6 +100,8 @@ echo ""
 echo "▶  [7/8] Installing systemd service..."
 cp "${DEPLOY_DIR}/pixiechess-server/scripts/pixiechess.service" /etc/systemd/system/
 systemctl daemon-reload
+echo "   Setting correct permissions and ownership..."
+chown -R "${SERVICE_USER}:${SERVICE_USER}" "${DEPLOY_DIR}"
 systemctl enable pixiechess
 systemctl restart pixiechess
 sleep 2

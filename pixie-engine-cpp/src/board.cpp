@@ -357,19 +357,19 @@ void Board::do_move(Move m) {
             history[ply].destroyed[history[ply].num_destroyed++] = {to, FISSION_REACTOR, us};
             int r = to / 8;
             int c = to % 8;
-            for (int dr = -1; dr <= 1; dr++) {
-                for (int dc = -1; dc <= 1; dc++) {
-                    if (dr == 0 && dc == 0) continue;
-                    int nr = r + dr;
-                    int nc = c + dc;
-                    if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
-                        int nsq = nr * 8 + nc;
-                        if (get_bit(occupancies[them], nsq)) {
-                            for (int p = 0; p < 39; p++) {
-                                if (get_bit(pieces[them][p], nsq)) {
-                                    destroy_piece(nsq, p, (Color)them);
-                                    break;
-                                }
+            int diag_offsets[4][2] = { {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
+            for (int i = 0; i < 4; i++) {
+                int dr = diag_offsets[i][0];
+                int dc = diag_offsets[i][1];
+                int nr = r + dr;
+                int nc = c + dc;
+                if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
+                    int nsq = nr * 8 + nc;
+                    if (get_bit(occupancies[them], nsq)) {
+                        for (int p = 0; p < 39; p++) {
+                            if (get_bit(pieces[them][p], nsq)) {
+                                destroy_piece(nsq, p, (Color)them);
+                                break;
                             }
                         }
                     }

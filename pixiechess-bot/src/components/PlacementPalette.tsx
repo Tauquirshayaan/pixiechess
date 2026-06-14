@@ -246,6 +246,18 @@ export default function PlacementPalette({ hoveredBoardPiece }: { hoveredBoardPi
       </div>
 
       {/* ── Info panel: shows hovered palette piece OR hovered board piece ── */}
+      <style>{`
+        @media (min-width: 1024px) {
+          .pc-fixed-height {
+            height: 64px !important;
+            box-sizing: border-box !important;
+          }
+          .pc-fixed-height-placeholder {
+            height: 64px !important;
+            margin-top: 10px !important;
+          }
+        }
+      `}</style>
       {(() => {
         // Priority: board piece hover > palette piece hover
         if (hoveredBoardPiece && (hoveredBoardPiece.pixie || hoveredBoardPiece.isBlueprint)) {
@@ -253,26 +265,26 @@ export default function PlacementPalette({ hoveredBoardPiece }: { hoveredBoardPi
           const m = PIECE_CATALOG[pixieType];
           if (m) {
             return (
-              <div style={{
+              <div className="pc-fixed-height" style={{
                 marginTop: 10, background: T.accentSoft,
                 border: `1px solid ${m.color}40`,
-                borderRadius: 8, padding: 10, fontSize: 13, color: T.textSec, lineHeight: 1.6,
+                borderRadius: 8, padding: '6px 10px', fontSize: 13, color: T.textSec, lineHeight: 1.4,
+                display: 'flex', flexDirection: 'column', justifyContent: 'center', boxSizing: 'border-box'
               }}>
-                <div style={{ color: m.color, fontWeight: 800, marginBottom: 3, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 10, background: hoveredBoardPiece.color === 'w' ? '#EDE9FF' : '#1E1535', color: hoveredBoardPiece.color === 'w' ? '#7C3AED' : '#FFF', padding: '1px 5px', borderRadius: 4, fontWeight: 700 }}>
+                <div style={{ color: m.color, fontWeight: 800, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 9, background: hoveredBoardPiece.color === 'w' ? '#EDE9FF' : '#1E1535', color: hoveredBoardPiece.color === 'w' ? '#7C3AED' : '#FFF', padding: '1px 4px', borderRadius: 3, fontWeight: 700 }}>
                     {hoveredBoardPiece.color === 'w' ? 'WHITE' : 'BLACK'}
                   </span>
                   {m.label}
                   {m.danger > 1 && (
-                    <span style={{ fontSize: 12 }}>{'🔥'.repeat(m.danger)}</span>
+                    <span style={{ fontSize: 11 }}>{'🔥'.repeat(m.danger)}</span>
                   )}
                 </div>
-                <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
-                  {m.isLethal && <span style={{ background: '#FEE2E2', color: '#EF4444', padding: '2px 6px', borderRadius: 4, fontSize: 10, fontWeight: 700 }}>LETHAL</span>}
-                  {m.isControl && <span style={{ background: '#E0E7FF', color: '#4F46E5', padding: '2px 6px', borderRadius: 4, fontSize: 10, fontWeight: 700 }}>CONTROL</span>}
-                  {m.isIndestructible && <span style={{ background: '#FEF3C7', color: '#D97706', padding: '2px 6px', borderRadius: 4, fontSize: 10, fontWeight: 700 }}>INDESTRUCTIBLE</span>}
+                <div style={{ display: 'flex', gap: 4, marginTop: 4 }}>
+                  {m.isLethal && <span style={{ background: '#FEE2E2', color: '#EF4444', padding: '1px 5px', borderRadius: 3, fontSize: 9, fontWeight: 700 }}>LETHAL</span>}
+                  {m.isControl && <span style={{ background: '#E0E7FF', color: '#4F46E5', padding: '1px 5px', borderRadius: 3, fontSize: 9, fontWeight: 700 }}>CONTROL</span>}
+                  {m.isIndestructible && <span style={{ background: '#FEF3C7', color: '#D97706', padding: '1px 5px', borderRadius: 3, fontSize: 9, fontWeight: 700 }}>INDESTRUCTIBLE</span>}
                 </div>
-                {m.description}
               </div>
             );
           }
@@ -297,7 +309,12 @@ export default function PlacementPalette({ hoveredBoardPiece }: { hoveredBoardPi
             </div>
           );
         }
-        return null;
+        return (
+          <div className="pc-fixed-height-placeholder" style={{
+            height: 0,
+            overflow: 'hidden'
+          }} />
+        );
       })()}
     </div>
   );

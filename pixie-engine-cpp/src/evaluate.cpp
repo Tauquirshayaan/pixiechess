@@ -485,23 +485,25 @@ int evaluate(const Board& b) {
         
         // ============================================================
         //  PHASE 6: PILGRIM DISTANCE TRACKING (Fix 6)
-        //  Bonus when Pilgrim is close to resurrection threshold.
+        //  Continuous scaling bonus when Pilgrim is accumulating distance to resurrect a dead piece.
         // ============================================================
         U64 pilgrims = b.pieces[c][PILGRIM];
         while (pilgrims) {
             int psq = pop_lsb(pilgrims);
-            int dist = b.ability_tracker[psq].pilgrim_dist;
-            if (dist >= 15 && !b.ability_tracker[psq].ability_used) {
-                // Check if there's a valuable piece in the dead pool to resurrect
+            if (!b.ability_tracker[psq].ability_used) {
+                int dist = b.ability_tracker[psq].pilgrim_dist;
                 bool has_dead_queen = b.dead_pieces_count[c][QUEEN] > 0;
                 bool has_dead_rook = b.dead_pieces_count[c][ROOK] > 0;
-                if (has_dead_queen) {
-                    classical_score += 300 * color_sign; // Queen resurrection imminent!
-                } else if (has_dead_rook) {
-                    classical_score += 150 * color_sign; // Rook resurrection approaching
-                } else {
-                    classical_score += 50 * color_sign;  // Any resurrection is still good
-                }
+                bool has_dead_minor = b.dead_pieces_count[c][BISHOP] > 0 || b.dead_pieces_count[c][KNIGHT] > 0;
+                bool has_dead_pawn = b.dead_pieces_count[c][PAWN] > 0;
+                
+                int multiplier = 2; // Default baseline multiplier
+                if (has_dead_queen) multiplier = 15;
+                else if (has_dead_rook) multiplier = 10;
+                else if (has_dead_minor) multiplier = 6;
+                else if (has_dead_pawn) multiplier = 3;
+                
+                classical_score += dist * multiplier * color_sign;
             }
         }
         
@@ -739,6 +741,51 @@ int evaluate(const Board& b) {
                     if (dist <= max_range) {
                         classical_score -= 200 * color_sign; // King in marauder range!
                     }
+                }
+            }
+        }
+        
+        // ============================================================
+        //  PHASE 8: MATING NET / MOP-UP HEURISTICS (Endgame Optimization)
+        //  Encourages driving the enemy King to the edges/corners and bringing
+        //  our King close to trap them when the opponent has <= 8 pieces.
+        // ============================================================
+        int enemy_pieces_count = 0;
+        for (int pt = 0; pt < 39; pt++) {
+            enemy_pieces_count += popcount(b.pieces[them][pt]);
+        }
+        
+        if (enemy_pieces_count <= 8) {
+            U64 our_king_bb = b.pieces[c][KING] | b.pieces[c][ROCKETMAN];
+            U64 enemy_king_bb = b.pieces[them][KING] | b.pieces[them][ROCKETMAN];
+            
+            if (our_king_bb && enemy_king_bb) {
+                int our_king_sq = get_lsb(our_king_bb);
+                int enemy_king_sq = get_lsb(enemy_king_bb);
+                
+                int ek_r = enemy_king_sq / 8;
+                int ek_c = enemy_king_sq % 8;
+                int ok_r = our_king_sq / 8;
+                int ok_c = our_king_sq % 8;
+                
+                // 1. Push enemy king to the corners/edges
+                int dist_to_center_r = std::max(3 - ek_r, ek_r - 4);
+                int dist_to_center_c = std::max(3 - ek_c, ek_c - 4);
+                int corner_dist = dist_to_center_r + dist_to_center_c; // 0 (center) to 6 (corners)
+                
+                // 2. Bring our own king closer to the enemy king
+                int king_dist = std::abs(ek_r - ok_r) + std::abs(ek_c - ok_c); // 1 to 14
+                
+                // Only reward mop-up if we have a material advantage
+                int our_material = 0;
+                int enemy_material = 0;
+                for (int pt = 0; pt < 39; pt++) {
+                    our_material += popcount(b.pieces[c][pt]) * PIECE_VALUES[pt];
+                    enemy_material += popcount(b.pieces[them][pt]) * PIECE_VALUES[pt];
+                }
+                
+                if (our_material > enemy_material + 200) {
+                    classical_score += (corner_dist * 20 + (14 - king_dist) * 15) * color_sign;
                 }
             }
         }

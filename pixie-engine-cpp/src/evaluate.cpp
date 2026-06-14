@@ -107,12 +107,34 @@ int evaluate(const Board& b) {
                     piece_val += (b.ability_tracker[sq].marauder_kills * 100);
                 }
                 
+                // Pawn promotion priority when no Pilgrim is alive (to respawn Queen/Rook)
+                if ((pt == PAWN || (pt >= GOLDEN_PAWN && pt <= WAR_AUTOMATON)) && popcount(b.pieces[c][PILGRIM]) == 0) {
+                    bool has_dead_queen = b.dead_pieces_count[c][QUEEN] > 0;
+                    bool has_dead_rook = b.dead_pieces_count[c][ROOK] > 0;
+                    
+                    if (has_dead_queen || has_dead_rook) {
+                        int r = sq / 8;
+                        if (c == WHITE) {
+                            if (r >= 4) { // Rank 5, 6, 7
+                                int advance_bonus = (r - 3) * (has_dead_queen ? 40 : 20);
+                                classical_score += advance_bonus * color_sign;
+                            }
+                        } else {
+                            if (r <= 3) { // Rank 5, 6, 7 from Black's view (Row 3, 2, 1)
+                                int advance_bonus = (4 - r) * (has_dead_queen ? 40 : 20);
+                                classical_score += advance_bonus * color_sign;
+                            }
+                        }
+                    }
+                }
+                
                 classical_score += piece_val * color_sign;
                 
                 // PST score
                 if (pst != nullptr) {
-                    // For black, flip the rank by XORing with 56 (0b111000)
-                    int pst_sq = (c == WHITE) ? sq : sq ^ 56;
+                    // For White, flip the rank to map bottom-up coords to top-down PST array.
+                    // For Black, Black's natural perspective is already top-down.
+                    int pst_sq = (c == WHITE) ? sq ^ 56 : sq;
                     classical_score += pst[pst_sq] * color_sign;
                 }
             }
@@ -508,6 +530,33 @@ int evaluate(const Board& b) {
         }
         
         // ============================================================
+        //  PHASE 6B: ENEMY PILGRIM TRACKING
+        //  Penalize opponent's Pilgrim distance and reward threatening/attacking
+        //  enemy Pilgrims that are close to resurrection.
+        // ============================================================
+        U64 enemy_pilgrims = b.pieces[them][PILGRIM];
+        while (enemy_pilgrims) {
+            int epsq = pop_lsb(enemy_pilgrims);
+            if (!b.ability_tracker[epsq].ability_used) {
+                int edist = b.ability_tracker[epsq].pilgrim_dist;
+                bool enemy_dead_queen = b.dead_pieces_count[them][QUEEN] > 0;
+                bool enemy_dead_rook = b.dead_pieces_count[them][ROOK] > 0;
+                
+                int emultiplier = 1;
+                if (enemy_dead_queen) emultiplier = 6;
+                else if (enemy_dead_rook) emultiplier = 4;
+                
+                // Penalize enemy's distance (which is a relative penalty of edist * emultiplier * color_sign)
+                classical_score -= edist * emultiplier * color_sign;
+                
+                // If enemy Pilgrim is close to resurrection, reward us for attacking it!
+                if (edist >= 10 && b.is_square_attacked(epsq, (Color)c)) {
+                    classical_score += 100 * color_sign; // Extra incentive to target it!
+                }
+            }
+        }
+        
+        // ============================================================
         //  PHASE 7: HORDE INTEGRITY PENALTY (Fix 7)
         //  If ANY Hordeling or the Horde Mother is hanging, the ENTIRE swarm is at risk.
         // ============================================================
@@ -747,8 +796,8 @@ int evaluate(const Board& b) {
         
         // ============================================================
         //  PHASE 8: MATING NET / MOP-UP HEURISTICS (Endgame Optimization)
-        //  Encourages driving the enemy King to the edges/corners and bringing
-        //  our King close to trap them when the opponent has <= 8 pieces.
+        //  Encourages driving the enemy King to the edges/corners, and bringing
+        //  our King close to trap them only after analyzing remaining enemy threat/danger.
         // ============================================================
         int enemy_pieces_count = 0;
         for (int pt = 0; pt < 39; pt++) {
@@ -768,13 +817,10 @@ int evaluate(const Board& b) {
                 int ok_r = our_king_sq / 8;
                 int ok_c = our_king_sq % 8;
                 
-                // 1. Push enemy king to the corners/edges
+                // 1. Push enemy king to the corners/edges (always safe and encouraged)
                 int dist_to_center_r = std::max(3 - ek_r, ek_r - 4);
                 int dist_to_center_c = std::max(3 - ek_c, ek_c - 4);
                 int corner_dist = dist_to_center_r + dist_to_center_c; // 0 (center) to 6 (corners)
-                
-                // 2. Bring our own king closer to the enemy king
-                int king_dist = std::abs(ek_r - ok_r) + std::abs(ek_c - ok_c); // 1 to 14
                 
                 // Only reward mop-up if we have a material advantage
                 int our_material = 0;
@@ -785,7 +831,20 @@ int evaluate(const Board& b) {
                 }
                 
                 if (our_material > enemy_material + 200) {
-                    classical_score += (corner_dist * 20 + (14 - king_dist) * 15) * color_sign;
+                    // Always reward cornering the enemy King
+                    classical_score += corner_dist * 20 * color_sign;
+                    
+                    // Analyze danger of left enemy pieces before bringing our King closer
+                    bool enemy_has_queen = b.pieces[them][QUEEN] > 0 || b.pieces[them][FISSION_REACTOR] > 0;
+                    bool enemy_has_rook = b.pieces[them][ROOK] > 0 || b.pieces[them][PHASE_ROOK] > 0 || b.pieces[them][SUMOROOK] > 0;
+                    
+                    // Dangerous if they have a Queen/Reactor, or a Rook with other pieces
+                    bool king_danger = enemy_has_queen || (enemy_has_rook && enemy_pieces_count > 3);
+                    
+                    if (!king_danger || (our_material > enemy_material + 600)) {
+                        int king_dist = std::abs(ek_r - ok_r) + std::abs(ek_c - ok_c); // 1 to 14
+                        classical_score += (14 - king_dist) * 15 * color_sign;
+                    }
                 }
             }
         }

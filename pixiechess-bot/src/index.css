@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  --color-background: #F4F0FA;
+  --color-primary: #7C3AED;
+  --color-secondary: #60A5FA;
+  --color-danger: #EF4444;
+  --color-freeze: #BAE6FD;
+  --color-gold: #FFD700;
+}
+
+body {
+  background-color: #F4F0FA !important;
+  color: #1E1535;
+  margin: 0;
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}

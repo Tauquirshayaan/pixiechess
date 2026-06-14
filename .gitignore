@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.npm/
+package-lock.json
+
+# Build and distribution directories
+dist/
+build/
+build_wasm/
+build_output.txt
+make_output.txt
+build.log
+
+# Large SDKs and updates
+emsdk/
+master_update/
+*.jsonl
+training_data.jsonl
+*.tsbuildinfo
+
+# Zipped packages and media
+*.zip
+*.rar
+*.gz
+*.tar
+Power pieces move video/
+Referance design/
+
+# Compiled engine binaries
+pixie-engine-cpp/build/
+pixie-engine-cpp/build_wasm/
+pixiechess-server/src/engine/bin/pixie-engine-cpp
+pixiechess-server/src/engine/bin/pixie-engine-cpp.exe
+pixiechess-server/src/engine/bin/pixiechess.exe
+pixiechess-server/src/engine/bin/test.txt
+
+# Local environment & IDE files
+.env
+.env.local
+.env.production
+.vscode/
+.idea/
+*.suo
+*.user
+.DS_Store
+Thumbs.db

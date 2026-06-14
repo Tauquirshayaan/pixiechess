@@ -1,0 +1,44 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# TypeScript build output (re-built inside Docker)
+dist/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Test/debug scripts
+test-*.ts
+test-*.js
+test-*.mjs
+debug-*.ts
+debug-*.js
+debug_*.ts
+debug_*.js
+scratch*.ts
+scratch*.js
+check_*.ts
+compare_*.ts
+trace_*.ts
+fix*.ts
+*.mjs
+
+# Log files
+*.log
+*.txt
+parity_log.txt
+parity_out*.txt
+output.txt
+server_output.log
+stderr.txt
+stdout.txt
+
+# Large training data (uploaded separately to GCP VM for training)
+training_data.jsonl
+
+# Source maps
+*.js.map
+
+# OS files
+.DS_Store
+Thumbs.db

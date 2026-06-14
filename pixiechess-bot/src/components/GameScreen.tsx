@@ -376,7 +376,7 @@ export default function GameScreen() {
 
   return (
     <>
-      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
         {/* ── LEFT COLUMN: Board only ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, position: 'relative' }}>
           <Toolbar />

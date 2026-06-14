@@ -6,7 +6,8 @@ function App() {
     <div style={{
       background: '#F4F0FA',
       minHeight: '100vh',
-      fontFamily: "'Roboto Condensed', 'Inter', sans-serif",
+      fontFamily: "'Inter', system-ui, sans-serif",
+      WebkitFontSmoothing: 'antialiased' as any,
       color: '#1E1535',
       padding: '24px 16px',
       overflowX: 'hidden',
@@ -45,7 +46,7 @@ function App() {
           borderRadius: 12,
           letterSpacing: '1px'
         }}>
-          v3.2.3 (Grandmaster AI + Power Sync)
+          v3.2.4 (Grandmaster AI + Power Sync)
         </div>
       </div>
 

@@ -77,7 +77,7 @@ export default function PlacementPalette({ hoveredBoardPiece }: { hoveredBoardPi
     borderRadius: 6,
     color: tab === t ? T.accent : T.textSec,
     cursor: 'pointer',
-    fontFamily: "'Roboto Condensed', 'Inter', sans-serif",
+    fontFamily: "'Inter', sans-serif",
     padding: '5px 10px',
     fontSize: 12,
     fontWeight: 600,
@@ -110,7 +110,7 @@ export default function PlacementPalette({ hoveredBoardPiece }: { hoveredBoardPi
             flex: 1, background: mainTab === t ? T.btnBgAct : T.btnBg,
             border: `1px solid ${mainTab === t ? T.borderAct : T.border}`,
             borderRadius: 6, color: mainTab === t ? T.accent : T.textSec,
-            cursor: 'pointer', fontFamily: "'Roboto Condensed', 'Inter', sans-serif", padding: '6px',
+            cursor: 'pointer', fontFamily: "'Inter', sans-serif", padding: '6px',
             fontSize: 13, fontWeight: 700, transition: 'all .15s'
           }}>
             {t === 'Loadout' ? '★ My Loadout' : 'All Pieces'}
@@ -247,13 +247,15 @@ export default function PlacementPalette({ hoveredBoardPiece }: { hoveredBoardPi
 
       {/* ── Info panel: shows hovered palette piece OR hovered board piece ── */}
       <style>{`
-        .pc-fixed-height {
-          height: 64px;
-          box-sizing: border-box;
-        }
-        .pc-fixed-height-placeholder {
-          height: 64px;
-          margin-top: 10px;
+        @media (min-width: 1024px) {
+          .pc-fixed-height {
+            height: 64px !important;
+            box-sizing: border-box !important;
+          }
+          .pc-fixed-height-placeholder {
+            height: 64px !important;
+            margin-top: 10px !important;
+          }
         }
       `}</style>
       {(() => {

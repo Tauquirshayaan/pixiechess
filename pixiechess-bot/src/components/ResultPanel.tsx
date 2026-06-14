@@ -69,19 +69,19 @@ export default function ResultPanel({ isCalculating, pendingResult, error, winMs
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ color: '#94A3B8', fontSize: 16, fontWeight: 700, fontFamily: "'Inter', sans-serif" }}>
+            <span style={{ color: '#94A3B8', fontSize: 16, fontWeight: 700, fontFamily: "'Roboto Condensed', 'Inter', sans-serif" }}>
               <span style={{ display: 'inline-block', width: 10, height: 10, background: '#10B981', borderRadius: '50%', marginRight: 6, animation: 'pulse 1.5s infinite' }} />
               <style>{`@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }`}</style>
               Live Eval
             </span>
             {evalStream.score !== undefined && (
-              <span style={{ color: '#111827', fontSize: 16, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>
+              <span style={{ color: '#111827', fontSize: 16, fontWeight: 600, fontFamily: "'Roboto Condensed', 'Inter', sans-serif" }}>
                 {evalStream.score > 0 ? '+' : ''}{(evalStream.score / 100).toFixed(2)}
               </span>
             )}
           </div>
         </div>
-        <div style={{ color: '#64748B', fontSize: 13, fontWeight: 500, fontFamily: "'Inter', sans-serif", letterSpacing: 0.2, display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ color: '#64748B', fontSize: 13, fontWeight: 500, fontFamily: "'Roboto Condensed', 'Inter', sans-serif", letterSpacing: 0.2, display: 'flex', justifyContent: 'space-between' }}>
           <span>{evalStream.pv ? evalStream.pv.split(' ').slice(0, 3).join(' ') + '...' : 'Searching...'}</span>
           <span style={{ color: '#94A3B8' }}>Depth {evalStream.depth || 0}</span>
         </div>
@@ -156,10 +156,10 @@ export default function ResultPanel({ isCalculating, pendingResult, error, winMs
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ color: '#7C3AED', fontSize: 18, fontWeight: 800, fontFamily: "'Inter', sans-serif" }}>
+            <span style={{ color: '#7C3AED', fontSize: 18, fontWeight: 800, fontFamily: "'Roboto Condensed', 'Inter', sans-serif" }}>
               {mainSan}
             </span>
-            <span style={{ color: '#111827', fontSize: 16, fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>
+            <span style={{ color: '#111827', fontSize: 16, fontWeight: 600, fontFamily: "'Roboto Condensed', 'Inter', sans-serif" }}>
               {score > 0 ? '+' : ''}{(score / 100).toFixed(2)}
             </span>
           </div>
@@ -168,13 +168,13 @@ export default function ResultPanel({ isCalculating, pendingResult, error, winMs
             style={{
               background: '#10B981', color: 'white', border: 'none', borderRadius: 6,
               padding: '6px 12px', fontSize: 13, fontWeight: 700, cursor: 'pointer',
-              fontFamily: "'Inter', sans-serif"
+              fontFamily: "'Roboto Condensed', 'Inter', sans-serif"
             }}
           >
             APPLY
           </button>
         </div>
-        <div style={{ color: '#64748B', fontSize: 13, fontWeight: 500, fontFamily: "'Inter', sans-serif", letterSpacing: 0.2, display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ color: '#64748B', fontSize: 13, fontWeight: 500, fontFamily: "'Roboto Condensed', 'Inter', sans-serif", letterSpacing: 0.2, display: 'flex', justifyContent: 'space-between' }}>
           <span>Engine Evaluation</span>
           <span style={{ color: '#94A3B8' }}>Depth {pendingResult.depth || 0}</span>
         </div>
@@ -191,7 +191,7 @@ export default function ResultPanel({ isCalculating, pendingResult, error, winMs
               <div 
                 key={i} 
                 onClick={(e) => handlePreviewAndSelect(e, pv.move, pv.score)}
-                style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#64748B', fontFamily: "'Inter', sans-serif", cursor: 'pointer', padding: '6px 8px', background: '#F1F5F9', borderRadius: 4 }}
+                style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14, color: '#64748B', fontFamily: "'Roboto Condensed', 'Inter', sans-serif", cursor: 'pointer', padding: '6px 8px', background: '#F1F5F9', borderRadius: 4 }}
               >
                 <span style={{ color: '#475569', fontWeight: 600 }}>{moveToSAN(pv.move, null, [])}</span>
                 <span style={{ fontWeight: 600 }}>{pv.score > 0 ? '+' : ''}{(pv.score / 100).toFixed(2)}</span>

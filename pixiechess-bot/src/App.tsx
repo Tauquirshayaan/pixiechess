@@ -6,7 +6,7 @@ function App() {
     <div style={{
       background: '#F4F0FA',
       minHeight: '100vh',
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Roboto Condensed', 'Inter', sans-serif",
       color: '#1E1535',
       padding: '24px 16px',
       overflowX: 'hidden',

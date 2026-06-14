@@ -21,7 +21,7 @@ const btnStyle = (active: boolean): React.CSSProperties => ({
   borderRadius: 6,
   color: active ? T.accent : T.textPrimary,
   cursor: 'pointer',
-  fontFamily: "'Inter', sans-serif",
+  fontFamily: "'Roboto Condensed', 'Inter', sans-serif",
   padding: '7px 14px',
   fontSize: 13,
   fontWeight: 600,

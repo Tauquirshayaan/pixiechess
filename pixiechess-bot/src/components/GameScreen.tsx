@@ -447,7 +447,7 @@ export default function GameScreen() {
                 border: 'none', borderRadius: 8, color: '#FFF',
                 cursor: (isCalculating || boardStatus === 'checkmate' || boardStatus === 'game_over') ? 'not-allowed' : 'pointer',
                 fontWeight: 900, fontSize: 15, padding: '10px 14px',
-                fontFamily: "'Inter', sans-serif", letterSpacing: 0.5,
+                fontFamily: "'Roboto Condensed', 'Inter', sans-serif", letterSpacing: 0.5,
                 boxShadow: (isCalculating || boardStatus === 'checkmate' || boardStatus === 'game_over') ? 'none' : '0 4px 20px rgba(124,58,237,0.35)',
                 transition: 'all .2s',
                 opacity: (isCalculating || boardStatus === 'checkmate' || boardStatus === 'game_over') ? 0.7 : 1,
@@ -530,7 +530,7 @@ export default function GameScreen() {
                     background: col === 'w' ? '#EDE9FF' : '#1E1535',
                     color: col === 'w' ? '#7C3AED' : '#FFF',
                     fontWeight: 800, fontSize: 14, cursor: 'pointer',
-                    fontFamily: "'Inter', sans-serif",
+                    fontFamily: "'Roboto Condensed', 'Inter', sans-serif",
                   }}>
                     {col === 'w' ? '⬜ White' : '⬛ Black'}
                   </button>

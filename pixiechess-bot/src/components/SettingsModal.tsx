@@ -116,7 +116,7 @@ export default function SettingsModal() {
                   color: multiPv === val ? T.accent : T.textSec,
                   fontWeight: multiPv === val ? 800 : 600,
                   fontSize: 13, cursor: 'pointer', transition: 'all 0.2s',
-                  fontFamily: "'Inter', sans-serif"
+                  fontFamily: "'Roboto Condensed', 'Inter', sans-serif"
                 }}
               >
                 {val} Line{val > 1 ? 's' : ''}
@@ -167,7 +167,7 @@ export default function SettingsModal() {
           <button onClick={() => setShowSettings(false)} style={{
             background: T.accent, border: 'none', borderRadius: 6,
             padding: '8px 20px', color: '#FFF', fontWeight: 700, fontSize: 14,
-            cursor: 'pointer', fontFamily: "'Inter', sans-serif",
+            cursor: 'pointer', fontFamily: "'Roboto Condensed', 'Inter', sans-serif",
           }}>Done</button>
         </div>
       </div>

@@ -26,7 +26,7 @@ export default function Toast() {
       borderRadius: 8,
       fontSize: 14,
       fontWeight: 600,
-      fontFamily: "'Inter', sans-serif",
+      fontFamily: "'Roboto Condensed', 'Inter', sans-serif",
       border: '1px solid #8B6FAE40',
       boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
       zIndex: 9999,

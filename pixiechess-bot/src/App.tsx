@@ -10,10 +10,13 @@ function App() {
       WebkitFontSmoothing: 'antialiased' as any,
       color: '#1E1535',
       padding: '24px 16px',
-      overflowX: 'hidden',
+      overflowX: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     }}>
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
+      <div style={{ textAlign: 'center', marginBottom: 24, width: '100%' }}>
         <h1 style={{
           fontSize: 30,
           fontWeight: 900,
@@ -54,6 +57,7 @@ function App() {
         <GameScreen />
       </ErrorBoundary>
     </div>
+
   );
 }
 

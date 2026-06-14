@@ -523,6 +523,32 @@ void generate_pseudo_legal_moves(const Board& b, MoveList& list) {
         }
     }
 
+    // 4.55 PAWN_KNIFE Extended Diagonal Captures (abs(dx)==2, abs(dy)==2, toward center d/e files)
+    U64 pawn_knives = b.pieces[us][PAWN_KNIFE] & ~paralyzed_squares & ~av_aura;
+    while (pawn_knives) {
+        int sq = pop_lsb(pawn_knives);
+        int r = sq / 8;
+        int c = sq % 8;
+        int fwd = (us == WHITE) ? 2 : -2;
+        int nr = r + fwd;
+        if (nr >= 0 && nr <= 7) {
+            // Extended diagonal captures: ±2 file offset, toward center (files 3/4, i.e. d/e)
+            for (int dc : {-2, 2}) {
+                int nc = c + dc;
+                if (nc < 0 || nc > 7) continue;
+                // Must be toward center: if piece is on left half (c <= 3), dc must be +2; if right half (c >= 4), dc must be -2
+                // Per the description: "toward d/e file"
+                if (c <= 3 && dc < 0) continue; // moving further left is away from center
+                if (c >= 4 && dc > 0) continue; // moving further right is away from center
+                int to_sq = nr * 8 + nc;
+                if (!get_bit(enemy_pieces, to_sq)) continue;  // must capture
+                if (get_bit(invulnerable, to_sq)) continue;
+                int cap_type = b.get_piece_on_square(to_sq);
+                add_pawn_move(sq, to_sq, PAWN_KNIFE, true, cap_type, false);
+            }
+        }
+    }
+
     // 4.5 SHRIKE SPECIAL TRAP
     U64 shrikes = b.pieces[us][SHRIKE] & ~paralyzed_squares;
     while (shrikes) {

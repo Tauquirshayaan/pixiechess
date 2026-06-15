@@ -81,12 +81,22 @@ int evaluate(const Board& b) {
         non_pawn_material += popcount(b.pieces[WHITE][pt]) * PIECE_VALUES[pt];
         non_pawn_material += popcount(b.pieces[BLACK][pt]) * PIECE_VALUES[pt];
     }
+    non_pawn_material += b.num_knightmares_limbo[WHITE] * PIECE_VALUES[KNIGHTMARE];
+    non_pawn_material += b.num_knightmares_limbo[BLACK] * PIECE_VALUES[KNIGHTMARE];
+    if (b.dissipated_djinn_sqs[WHITE] != NO_SQ) non_pawn_material += PIECE_VALUES[DJINN];
+    if (b.dissipated_djinn_sqs[BLACK] != NO_SQ) non_pawn_material += PIECE_VALUES[DJINN];
     
     bool is_endgame = non_pawn_material < 3000;
     
     for (int c = WHITE; c <= BLACK; c++) {
         int color_sign = (c == WHITE) ? 1 : -1;
         Color them = (c == WHITE) ? BLACK : WHITE;
+        
+        // Restore dissipated DJINN base material value
+        if (b.dissipated_djinn_sqs[c] != NO_SQ) {
+            classical_score += PIECE_VALUES[DJINN] * color_sign;
+            classical_score += 150 * color_sign; // Bonus for being safely dissipated (untargetable) and ready to respawn
+        }
         
         // ============================================================
         //  PHASE 1: Material + PST (with dynamic ability scaling)
@@ -674,6 +684,9 @@ int evaluate(const Board& b) {
         //  Dynamic Threat & Trapping Evaluation for Off-board Knightmares
         // ============================================================
         if (b.num_knightmares_limbo[c] > 0) {
+            // Restore Base Material Value!
+            classical_score += b.num_knightmares_limbo[c] * PIECE_VALUES[KNIGHTMARE] * color_sign;
+            
             int km_dirs[8][2] = {{-2,-1}, {-2,1}, {-1,-2}, {-1,2}, {1,-2}, {1,2}, {2,-1}, {2,1}};
             for (int i = 0; i < b.num_knightmares_limbo[c]; i++) {
                 uint8_t encoded = b.knightmare_limbo_coords[c][i];

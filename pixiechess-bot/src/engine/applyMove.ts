@@ -78,6 +78,17 @@ export function applyMove(
         effects.push('KNIGHTMARE_DROP');
       } else {
         // Drop to ANOTHER off-board square
+        if (move.capture && move.obCapSq) {
+          const enemyObIdx = ngs.offBoardPieces.findIndex(
+            ob => ob.obSq[0] === move.obCapSq![0] && ob.obSq[1] === move.obCapSq![1] && ob.piece.color !== obEntry.piece.color
+          );
+          if (enemyObIdx >= 0) {
+             const capturedOb = ngs.offBoardPieces[enemyObIdx];
+             ngs.offBoardPieces = ngs.offBoardPieces.filter((_, i) => i !== enemyObIdx);
+             onPieceDestroyed(capturedOb.piece);
+          }
+        }
+        
         ngs.offBoardPieces.push({
           piece: { ...obEntry.piece },
           obSq: [toR, toC]
@@ -96,6 +107,18 @@ export function applyMove(
   if (move.obJump) {
     const jumpingPiece = nb[move.from[0]][move.from[1]]!;
     nb[move.from[0]][move.from[1]] = null;
+
+    if (move.capture && move.obCapSq) {
+       const enemyObIdx = ngs.offBoardPieces.findIndex(
+         ob => ob.obSq[0] === move.obCapSq![0] && ob.obSq[1] === move.obCapSq![1] && ob.piece.color !== jumpingPiece.color
+       );
+       if (enemyObIdx >= 0) {
+          const capturedOb = ngs.offBoardPieces[enemyObIdx];
+          ngs.offBoardPieces = ngs.offBoardPieces.filter((_, i) => i !== enemyObIdx);
+          onPieceDestroyed(capturedOb.piece);
+       }
+    }
+
     ngs.offBoardPieces.push({
       piece: { ...jumpingPiece, state: { ...(jumpingPiece.state || {}) } },
       obSq: move.to

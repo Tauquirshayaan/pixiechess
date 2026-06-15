@@ -303,7 +303,7 @@ function generateShrike(pixie: { sq: number, color: 'w' | 'b', pieceState?: any 
   }
 }
 
-function generateKnightmare(pixie: { sq: number, color: 'w' | 'b' }, state: BitboardState, moves: Move[]): void {
+function generateKnightmare(pixie: { sq: number, color: 'w' | 'b' }, state: BitboardState, moves: Move[], gameState: GameState): void {
   const r = rankOf(pixie.sq);
   const c = fileOf(pixie.sq);
   
@@ -311,7 +311,21 @@ function generateKnightmare(pixie: { sq: number, color: 'w' | 'b' }, state: Bitb
     const tr = r + dr, tc = c + dc;
     if (tr < 0 || tr > 7 || tc < 0 || tc > 7) {
       if (tr >= -2 && tr <= 9 && tc >= -2 && tc <= 9) {
-        moves.push(createMove(pixie.sq, 0, false, { obJump: true, to: [tr, tc] }));
+        let enemyObFound = false;
+        let allyObFound = false;
+        for (const otherOb of (gameState.offBoardPieces || [])) {
+          if (otherOb.obSq[0] === tr && otherOb.obSq[1] === tc) {
+            if (otherOb.piece.color !== pixie.color) enemyObFound = true;
+            else allyObFound = true;
+          }
+        }
+        if (!allyObFound) {
+          if (enemyObFound) {
+            moves.push(createMove(pixie.sq, 0, true, { obJump: true, to: [tr, tc], obCapSq: [tr, tc] }));
+          } else {
+            moves.push(createMove(pixie.sq, 0, false, { obJump: true, to: [tr, tc] }));
+          }
+        }
       }
     } else {
       const toSq = (tr << 3) | tc;
@@ -933,7 +947,7 @@ export function generatePixieMoves(state: BitboardState, color: 'w' | 'b', gameS
         generateShrike(pixie, state, moves, gameState);
         break;
       case 'KNIGHTMARE':
-        generateKnightmare(pixie, state, moves);
+        generateKnightmare(pixie, state, moves, gameState);
         break;
       case 'BLADERUNNER':
         generateBladerunner(pixie, state, moves);

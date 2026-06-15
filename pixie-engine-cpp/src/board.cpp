@@ -348,6 +348,8 @@ void Board::do_move(Move m) {
                 for (int p = 0; p < 39; p++) {
                     if (get_bit(pieces[them][p], sq)) {
                         history[ply].doomed[history[ply].num_doomed++] = {sq, p, them};
+                        // C++ Engine Heuristic: Destroy doomed pieces immediately to accurately score the material advantage
+                        destroy_piece(sq, p, (Color)them);
                         break;
                     }
                 }

@@ -130,11 +130,20 @@ export function getAllMovesForColor(board: Board, color: 'w' | 'b', gameState: G
               dropMoves.push({ from: ob.obSq, to: [r, c], capture: !!target, drop: 'KNIGHTMARE' });
             }
           } else {
-            const isOccupied = (liveGameState.offBoardPieces || []).some(
-              otherOb => otherOb.obSq[0] === r && otherOb.obSq[1] === c
-            );
-            if (!isOccupied) {
-              dropMoves.push({ from: ob.obSq, to: [r, c], capture: false, drop: 'KNIGHTMARE', obJump: true });
+            let enemyObFound = false;
+            let allyObFound = false;
+            for (const otherOb of (liveGameState.offBoardPieces || [])) {
+              if (otherOb.obSq[0] === r && otherOb.obSq[1] === c) {
+                if (otherOb.piece.color !== color) enemyObFound = true;
+                else allyObFound = true;
+              }
+            }
+            if (!allyObFound) {
+              if (enemyObFound) {
+                dropMoves.push({ from: ob.obSq, to: [r, c], capture: true, drop: 'KNIGHTMARE', obJump: true, obCapSq: [r, c] });
+              } else {
+                dropMoves.push({ from: ob.obSq, to: [r, c], capture: false, drop: 'KNIGHTMARE', obJump: true });
+              }
             }
           }
         }

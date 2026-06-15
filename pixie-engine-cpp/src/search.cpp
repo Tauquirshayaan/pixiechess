@@ -72,6 +72,12 @@ void score_moves(MoveList& ml, Move tt_move, ThreadData* td, int ply, Color us) 
         } else if (m.is_capture()) {
             int attacker = m.piece();
             int victim = m.captured();
+            
+            // Fix MVV-LVA for Limbo-to-Limbo leaps where captured() stores the jump direction (0-7)
+            if (attacker == KNIGHTMARE && m.is_ability() && victim <= 7) {
+                victim = KNIGHTMARE;
+            }
+            
             if (victim != PIECE_TYPE_NONE) {
                 // MVV-LVA: Most Valuable Victim, Least Valuable Attacker
                 ml.scores[i] = 10000 + (PIECE_VALUES[victim] * 10) - PIECE_VALUES[attacker];

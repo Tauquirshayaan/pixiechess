@@ -76,6 +76,11 @@ function placementBonus(baseType: string, pixie: string, r: number, c: number, c
       break;
     }
   }
+  
+  // Add a tiny random jitter (0.001 to 0.009) to break perfectly symmetric ties
+  // This ensures White and Black don't always mirror each other robotically
+  bonus += (Math.random() * 0.008) + 0.001;
+
   return bonus;
 }
 
@@ -179,12 +184,9 @@ export function autoDeploy(board: Board, gameState: GameState, color: 'w' | 'b',
 
         // Always add our strategic placement bonus on top (works even when NNUE is absent)
         const pBonus = placementBonus(baseType, pixieName, r, c, color);
-        // Add tiny random noise to break ties unpredictably so Black and White don't perfectly mirror
-        const noise = Math.random() * 0.1;
-        
         // For white, higher score is better. For black, lower score is better.
         // We normalize: always maximize the "value for our side"
-        const signedBonus = color === 'w' ? (pBonus + noise) : -(pBonus + noise);
+        const signedBonus = color === 'w' ? pBonus : -pBonus;
         score += signedBonus;
 
         // Normalize: always compare as "white-perspective" value for our color

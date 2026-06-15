@@ -139,15 +139,9 @@ int evaluate(const Board& b) {
                 // The Queen should only be risked for decisive advantages. Preserve her heavily.
                 if (pt == QUEEN) {
                     if (!is_endgame) {
-                        // Inflate Queen's material value early/mid-game to refuse bad trades
+                        // Inflate Queen's material value early/mid-game to refuse bad trades or risky sacrifices
+                        // She will only be traded if we capture the enemy Queen or checkmate the King.
                         piece_val += 200; 
-                        
-                        // Penalize early Queen sorties (pushing her into enemy territory without a secure advantage)
-                        int r = sq / 8;
-                        bool overextended = (c == WHITE) ? (r < 5) : (r > 2); // Ranks 4-8 for White
-                        if (overextended) {
-                            classical_score -= 50 * color_sign;
-                        }
                     }
                 }
                 

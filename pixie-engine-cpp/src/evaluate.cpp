@@ -964,19 +964,19 @@ int evaluate(const Board& b) {
         // ============================================================
         //  PHASE 16: BASILISK PARALYSIS THREATS
         // ============================================================
-        U64 our_basilisks = b.pieces[c][BASILISK];
-        U64 their_basilisks = b.pieces[them][BASILISK];
+        U64 phase16_our_basilisks = b.pieces[c][BASILISK];
+        U64 phase16_their_basilisks = b.pieces[them][BASILISK];
         
-        if (our_basilisks || their_basilisks) {
+        if (phase16_our_basilisks || phase16_their_basilisks) {
             U64 paralyzed_by_us = 0ULL;
-            U64 temp_ob = our_basilisks;
+            U64 temp_ob = phase16_our_basilisks;
             while (temp_ob) {
                 int sq = pop_lsb(temp_ob);
                 paralyzed_by_us |= get_sliding_attacks(sq, b.occupancies[BOTH], true, false);
             }
             
             U64 paralyzed_by_them = 0ULL;
-            U64 temp_tb = their_basilisks;
+            U64 temp_tb = phase16_their_basilisks;
             while (temp_tb) {
                 int sq = pop_lsb(temp_tb);
                 paralyzed_by_them |= get_sliding_attacks(sq, b.occupancies[BOTH], true, false);
@@ -988,7 +988,7 @@ int evaluate(const Board& b) {
                 int sq = pop_lsb(enemy_queens);
                 if (get_bit(paralyzed_by_us, sq)) {
                     classical_score += 500 * color_sign; // Queen Paralyzed
-                    if (b.is_square_attacked(sq, c)) {
+                    if (b.is_square_attacked(sq, (Color)c)) {
                         classical_score += 400 * color_sign; // And attacked!
                     }
                 }
@@ -999,7 +999,7 @@ int evaluate(const Board& b) {
                 int sq = pop_lsb(enemy_kings);
                 if (get_bit(paralyzed_by_us, sq)) {
                     classical_score += 800 * color_sign; // King Paralyzed
-                    if (b.is_square_attacked(sq, c)) {
+                    if (b.is_square_attacked(sq, (Color)c)) {
                         classical_score += 2000 * color_sign; // Checkmate threat!
                     }
                 }
@@ -1011,7 +1011,7 @@ int evaluate(const Board& b) {
                 int sq = pop_lsb(our_queens);
                 if (get_bit(paralyzed_by_them, sq)) {
                     classical_score -= 500 * color_sign; 
-                    if (b.is_square_attacked(sq, them)) {
+                    if (b.is_square_attacked(sq, (Color)them)) {
                         classical_score -= 400 * color_sign; 
                     }
                 }
@@ -1022,7 +1022,7 @@ int evaluate(const Board& b) {
                 int sq = pop_lsb(our_kings);
                 if (get_bit(paralyzed_by_them, sq)) {
                     classical_score -= 800 * color_sign;
-                    if (b.is_square_attacked(sq, them)) {
+                    if (b.is_square_attacked(sq, (Color)them)) {
                         classical_score -= 2000 * color_sign;
                     }
                 }

@@ -169,7 +169,16 @@ void generate_pseudo_legal_moves(const Board& b, MoveList& list) {
             int nc = c + km_dirs[d][1];
             if (nr < 0 || nr > 7 || nc < 0 || nc > 7) {
                 if (nr >= -2 && nr <= 9 && nc >= -2 && nc <= 9) {
-                    list.add(Move(sq, sq, KNIGHTMARE, PIECE_TYPE_NONE, d, false, true));
+                    bool is_cap = false;
+                    for (int j = 0; j < b.num_knightmares_limbo[them]; j++) {
+                        int r2 = (b.knightmare_limbo_coords[them][j] >> 4) - 2;
+                        int c2 = (b.knightmare_limbo_coords[them][j] & 0xF) - 2;
+                        if (r2 == nr && c2 == nc) {
+                            is_cap = true; break;
+                        }
+                    }
+                    int cap_type = is_cap ? KNIGHTMARE : PIECE_TYPE_NONE;
+                    list.add(Move(sq, sq, KNIGHTMARE, cap_type, d, is_cap, true));
                 }
             }
         }
@@ -196,23 +205,24 @@ void generate_pseudo_legal_moves(const Board& b, MoveList& list) {
                             list.add(Move(to_sq, to_sq, KNIGHTMARE, cap_type, i, is_cap, false));
                         }
                     } else {
-                        bool occupied = false;
+                        bool our_occupied = false;
                         for (int j = 0; j < b.num_knightmares_limbo[us]; j++) {
                             int r2 = (b.knightmare_limbo_coords[us][j] >> 4) - 2;
                             int c2 = (b.knightmare_limbo_coords[us][j] & 0xF) - 2;
                             if (r2 == nr && c2 == nc) {
-                                occupied = true; break;
+                                our_occupied = true; break;
                             }
                         }
+                        bool enemy_occupied = false;
                         for (int j = 0; j < b.num_knightmares_limbo[us ^ 1]; j++) {
                             int r2 = (b.knightmare_limbo_coords[us ^ 1][j] >> 4) - 2;
                             int c2 = (b.knightmare_limbo_coords[us ^ 1][j] & 0xF) - 2;
                             if (r2 == nr && c2 == nc) {
-                                occupied = true; break;
+                                enemy_occupied = true; break;
                             }
                         }
-                        if (!occupied) {
-                            list.add(Move(63, 63, KNIGHTMARE, d, i, false, true)); 
+                        if (!our_occupied) {
+                            list.add(Move(63, 63, KNIGHTMARE, d, i, enemy_occupied, true)); 
                         }
                     }
                 }

@@ -247,8 +247,8 @@ void Board::do_move(Move m) {
     
     // 5. Place piece on new square
     int final_piece = piece;
-    bool is_limbo_jump = (piece == KNIGHTMARE && m.is_ability() && m.captured() == PIECE_TYPE_NONE);
-    bool is_limbo_to_limbo = (piece == KNIGHTMARE && from == 63 && to == 63 && m.is_ability() && m.captured() != PIECE_TYPE_NONE);
+    bool is_limbo_to_limbo = (piece == KNIGHTMARE && m.is_ability() && m.captured() <= 7);
+    bool is_limbo_jump = (piece == KNIGHTMARE && m.is_ability() && !is_limbo_to_limbo);
     
     if (m.promoted() != PIECE_TYPE_NONE && !is_drop && !is_limbo_jump && !is_limbo_to_limbo && piece != HORDE_MOTHER) {
         final_piece = m.promoted();
@@ -286,6 +286,16 @@ void Board::do_move(Move m) {
         int c = from % 8 + km_dirs[m.promoted()][1];
         uint8_t encoded = ((r + 2) << 4) | (c + 2);
         knightmare_limbo_coords[us][num_knightmares_limbo[us]++] = encoded;
+        
+        if (m.is_capture()) {
+            for (int i = 0; i < num_knightmares_limbo[them]; i++) {
+                if (knightmare_limbo_coords[them][i] == encoded) {
+                    num_knightmares_limbo[them]--;
+                    knightmare_limbo_coords[them][i] = knightmare_limbo_coords[them][num_knightmares_limbo[them]];
+                    break;
+                }
+            }
+        }
     } else if (is_limbo_to_limbo) {
         int km_dirs[8][2] = {{-2,-1}, {-2,1}, {-1,-2}, {-1,2}, {1,-2}, {1,2}, {2,-1}, {2,1}};
         int idx = m.promoted();
@@ -295,7 +305,18 @@ void Board::do_move(Move m) {
         int old_c = (old_encoded & 0xF) - 2;
         int new_r = old_r + km_dirs[d][0];
         int new_c = old_c + km_dirs[d][1];
-        knightmare_limbo_coords[us][idx] = ((new_r + 2) << 4) | (new_c + 2);
+        uint8_t new_encoded = ((new_r + 2) << 4) | (new_c + 2);
+        knightmare_limbo_coords[us][idx] = new_encoded;
+        
+        if (m.is_capture()) {
+            for (int i = 0; i < num_knightmares_limbo[them]; i++) {
+                if (knightmare_limbo_coords[them][i] == new_encoded) {
+                    num_knightmares_limbo[them]--;
+                    knightmare_limbo_coords[them][i] = knightmare_limbo_coords[them][num_knightmares_limbo[them]];
+                    break;
+                }
+            }
+        }
     }
     
     if (!is_drop && !is_limbo_jump && !is_limbo_to_limbo && !is_dissipate && !is_duel) {
@@ -972,8 +993,8 @@ void Board::undo_move(Move m) {
     
     // 2. Remove piece from destination
     bool is_drop = (piece == KNIGHTMARE && from == to && !m.is_ability());
-    bool is_limbo_jump = (piece == KNIGHTMARE && m.is_ability() && m.captured() == PIECE_TYPE_NONE);
-    bool is_limbo_to_limbo = (piece == KNIGHTMARE && from == 63 && to == 63 && m.is_ability() && m.captured() != PIECE_TYPE_NONE);
+    bool is_limbo_to_limbo = (piece == KNIGHTMARE && m.is_ability() && m.captured() <= 7);
+    bool is_limbo_jump = (piece == KNIGHTMARE && m.is_ability() && !is_limbo_to_limbo);
     bool is_dissipate = (piece == DJINN && m.is_ability());
     bool is_duel = (piece == GUNSLINGER && m.is_ability());
     

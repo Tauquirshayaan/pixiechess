@@ -62,6 +62,7 @@ export interface Move {
   hordeSpawn?: [number, number]; // Horde Mother: spawn square for hordeling
   fishBonus?: boolean;           // Fish Knight: bonus king-step this move
   obJump?: boolean;              // Knightmare: this move exits board into off-board limbo
+  obCapSq?: [number, number];    // Knightmare: off-board coordinate of an enemy Knightmare captured in limbo
 }
 
 export interface FrozenPiece {

@@ -211,7 +211,18 @@ export function getAllMovesForColor(board: Board, color: 'w' | 'b', gameState: G
             }
           } else {
             // Landing OFF the board (in limbo)
-            dropMoves.push({ from: ob.obSq, to: [r, c], capture: false, drop: 'KNIGHTMARE', obJump: true });
+            let enemyObFound = false;
+            for (const eo of (gameState.offBoardPieces || [])) {
+              if (eo.piece.color !== color && eo.obSq[0] === r && eo.obSq[1] === c) {
+                enemyObFound = true;
+                break;
+              }
+            }
+            if (enemyObFound) {
+              dropMoves.push({ from: ob.obSq, to: [r, c], capture: true, drop: 'KNIGHTMARE', obJump: true, obCapSq: [r, c] });
+            } else {
+              dropMoves.push({ from: ob.obSq, to: [r, c], capture: false, drop: 'KNIGHTMARE', obJump: true });
+            }
           }
         }
       }

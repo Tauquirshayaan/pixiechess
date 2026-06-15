@@ -906,7 +906,7 @@ int evaluate(const Board& b) {
                     }
                 }
             }
-            if (targets_found > 0) classical_score += targets_found * 300 * color_sign;
+            if (targets_found > 0) classical_score += targets_found * 75 * color_sign;
         }
 
         // HERO_PAWN: Scaling bonus the closer it gets to enemy King
@@ -922,7 +922,7 @@ int evaluate(const Board& b) {
                 int dist_c = std::abs(fc - kc);
                 int dist = std::max(dist_r, dist_c);
                 int proximity_bonus = std::max(0, 6 - dist);
-                classical_score += proximity_bonus * 150 * color_sign;
+                classical_score += proximity_bonus * 40 * color_sign;
             }
         }
 
@@ -933,9 +933,9 @@ int evaluate(const Board& b) {
             int r = sq / 8, fc = sq % 8;
             int wp_rank = (c == WHITE) ? (7 - r) : r;
             if (fc == 0 || fc == 7) {
-                classical_score += wp_rank * 250 * color_sign; // Fast track to promotion
+                classical_score += wp_rank * 40 * color_sign; // Fast track to promotion
             } else {
-                classical_score += wp_rank * 50 * color_sign;
+                classical_score += wp_rank * 10 * color_sign;
             }
         }
 
@@ -948,7 +948,7 @@ int evaluate(const Board& b) {
             if (front_row >= 0 && front_row <= 7) {
                 int front_sq = front_row * 8 + fc;
                 if (get_bit(b.occupancies[c], front_sq)) {
-                    classical_score += 200 * color_sign; // Shielded
+                    classical_score += 60 * color_sign; // Shielded
                 }
             }
         }

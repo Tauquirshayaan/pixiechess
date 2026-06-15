@@ -484,7 +484,7 @@ export function evaluate(board: Board, gameState: GameState, acc?: StatefulAccum
             }
           }
         }
-        if (targetsFound > 0) threat += sign * (targetsFound * 3.0);
+        if (targetsFound > 0) threat += sign * (targetsFound * 0.75);
       }
       // ── HERO_PAWN: Incredible scaling bonus the closer it gets to enemy King ──
       else if (piece.pixie === 'HERO_PAWN') {
@@ -500,16 +500,16 @@ export function evaluate(board: Board, gameState: GameState, acc?: StatefulAccum
           const dist = Math.max(Math.abs(r - enemyKingSq[0]), Math.abs(c - enemyKingSq[1]));
           // The closer it gets, the higher the bonus (max 5)
           const proximityBonus = Math.max(0, 6 - dist);
-          ability += sign * (proximityBonus * 1.5);
+          ability += sign * (proximityBonus * 0.4);
         }
       }
       // ── WARP_JUMPER: Heavy progression bonus on A/H files ──
       else if (piece.pixie === 'WARP_JUMPER') {
         const wpRank = piece.color === 'w' ? 7 - r : r;
         if (c === 0 || c === 7) {
-          winCond += sign * (wpRank * 2.5); // Fast tracking to rank 8
+          winCond += sign * (wpRank * 0.4); // Fast tracking to rank 8
         } else {
-          ability += sign * (wpRank * 0.5); // Slower tracking if not safe
+          ability += sign * (wpRank * 0.1); // Slower tracking if not safe
         }
       }
       // ── WAR_AUTOMATON: Bonus if safely waiting behind own pieces ──
@@ -522,7 +522,7 @@ export function evaluate(board: Board, gameState: GameState, acc?: StatefulAccum
             isShielded = true;
           }
         }
-        if (isShielded) ability += sign * 2.0;
+        if (isShielded) ability += sign * 0.6;
       }
       // ── EPEE_PAWN: Global en passant is powerful in opening/midgame ──
       else if (piece.pixie === 'EPEE_PAWN') {

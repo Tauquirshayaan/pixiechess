@@ -29,7 +29,7 @@ function initPieceState(pixie: string): Record<string, unknown> {
 
 // Piece-square bonus for initial placement (used when NNUE is absent)
 // Returns a score bonus for placing a power piece of given base type at [r, c]
-function placementBonus(baseType: string, pixie: string, r: number, c: number, color: 'w' | 'b'): number {
+function placementBonus(baseType: string, pixie: string, r: number, c: number, color: 'w' | 'b', board: Board): number {
   // Flip row for black (so "rank 1" is always the home rank)
   const pr = color === 'w' ? r : 7 - r;
   const meta = PIECE_CATALOG[pixie as keyof typeof PIECE_CATALOG];
@@ -45,6 +45,38 @@ function placementBonus(baseType: string, pixie: string, r: number, c: number, c
       if (c >= 2 && c <= 5) bonus += 0.5;
       // GOLDEN_PAWN: massive advancement incentive
       if (pixie === 'GOLDEN_PAWN') bonus += pr * 1.5;
+      
+      // USER SYNERGY: Warp Jumper prefers Rook's pawn (A or H files) for safety
+      if (pixie === 'WARP_JUMPER') {
+        if (c === 0 || c === 7) bonus += 3.0; 
+      }
+      
+      // Find PHASE_ROOK for pairing synergies
+      let phaseRookCol = -1;
+      for (let hr = 0; hr < 8; hr++) {
+        for (let hc = 0; hc < 8; hc++) {
+          const p = board[hr][hc];
+          if (p && p.color === color && p.pixie === 'PHASE_ROOK') {
+            phaseRookCol = hc;
+            break;
+          }
+        }
+      }
+
+      // USER SYNERGY: Shrike pairs with Phase Rook (same column) to lure Queen
+      if (pixie === 'SHRIKE') {
+        if (phaseRookCol !== -1 && c === phaseRookCol) {
+          bonus += 3.5; 
+        }
+      }
+
+      // USER SYNERGY: War Automaton positioned just after Knight (B or G files).
+      // Pairs perfectly with Phase Rook trap on adjacent A/H files.
+      if (pixie === 'WAR_AUTOMATON') {
+        if (c === 1 || c === 6) bonus += 2.0;
+        if (phaseRookCol === 0 && c === 1) bonus += 2.0;
+        if (phaseRookCol === 7 && c === 6) bonus += 2.0;
+      }
       break;
     }
     case 'N': {
@@ -183,7 +215,7 @@ export function autoDeploy(board: Board, gameState: GameState, color: 'w' | 'b',
         let score = evaluate(newBoard, gameState, nextAcc);
 
         // Always add our strategic placement bonus on top (works even when NNUE is absent)
-        const pBonus = placementBonus(baseType, pixieName, r, c, color);
+        const pBonus = placementBonus(baseType, pixieName, r, c, color, newBoard);
         // For white, higher score is better. For black, lower score is better.
         // We normalize: always maximize the "value for our side"
         const signedBonus = color === 'w' ? pBonus : -pBonus;

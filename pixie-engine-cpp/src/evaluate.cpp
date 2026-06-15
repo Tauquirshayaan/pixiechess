@@ -117,6 +117,24 @@ int evaluate(const Board& b) {
                     piece_val += (b.ability_tracker[sq].marauder_kills * 100);
                 }
                 
+                // ---- BASILISK PRESERVATION ----
+                // Prioritize preserving the Basilisk until the endgame
+                if (pt == BASILISK) {
+                    if (!is_endgame) {
+                        piece_val += 250; // Treat it as highly valuable in early/mid game so we don't trade it
+                        
+                        // Penalize pushing it too far forward early on (keep it safe in our territory)
+                        int r = sq / 8;
+                        bool overextended = (c == WHITE) ? (r < 4) : (r > 3); // Ranks 5-8 for White, 1-4 for Black
+                        if (overextended) {
+                            classical_score -= 80 * color_sign;
+                        }
+                    } else {
+                        // In endgame, Basilisk becomes a highly active hunter
+                        piece_val += 100; 
+                    }
+                }
+                
                 // Pawn promotion priority when no Pilgrim is alive (to respawn Queen/Rook)
                 if ((pt == PAWN || (pt >= GOLDEN_PAWN && pt <= WAR_AUTOMATON)) && popcount(b.pieces[c][PILGRIM]) == 0) {
                     bool has_dead_queen = b.dead_pieces_count[c][QUEEN] > 0;

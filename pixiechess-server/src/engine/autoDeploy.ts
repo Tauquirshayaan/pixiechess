@@ -77,6 +77,31 @@ function placementBonus(baseType: string, pixie: string, r: number, c: number, c
         if (phaseRookCol === 0 && c === 1) bonus += 2.0;
         if (phaseRookCol === 7 && c === 6) bonus += 2.0;
       }
+
+      // PAWN_KNIFE: C and F files (dx=2 lands directly on center D/E files)
+      if (pixie === 'PAWN_KNIFE') {
+        if (c === 2 || c === 5) bonus += 2.5;
+      }
+
+      // EPEE_PAWN: Central files to observe the board for global en passant
+      if (pixie === 'EPEE_PAWN') {
+        if (c === 3 || c === 4) bonus += 2.5;
+      }
+
+      // HERO_PAWN: E-file directly faces the King, maximizes check-promotion threat
+      if (pixie === 'HERO_PAWN') {
+        if (c === 4) bonus += 3.0; // King's file
+      }
+
+      // BLUEPRINT: Center files to copy powerful adjacent pieces
+      if (pixie === 'BLUEPRINT') {
+        if (c === 3 || c === 4) bonus += 2.5;
+      }
+
+      // IRONPAWN: Central blocker gridlock
+      if (pixie === 'IRONPAWN') {
+        if (c === 3 || c === 4) bonus += 2.5;
+      }
       break;
     }
     case 'N': {

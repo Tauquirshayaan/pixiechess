@@ -883,6 +883,83 @@ int evaluate(const Board& b) {
                 }
             }
         }
+
+        // ============================================================
+        //  PHASE 15: PAWN POWER PIECES UTILIZATION
+        // ============================================================
+        // PAWN_KNIFE: Threat bonus if an enemy is in its strike zone (dx=±2, dy=2 forward)
+        U64 pawn_knives = b.pieces[c][PAWN_KNIFE];
+        while (pawn_knives) {
+            int sq = pop_lsb(pawn_knives);
+            int r = sq / 8, fc = sq % 8;
+            int dir = (c == WHITE) ? -1 : 1;
+            int targets_found = 0;
+            int dc_offsets[2] = {-2, 2};
+            for (int i = 0; i < 2; i++) {
+                int er = r + (dir * 2);
+                int ec = fc + dc_offsets[i];
+                if (er >= 0 && er <= 7 && ec >= 0 && ec <= 7) {
+                    int esq = er * 8 + ec;
+                    if (get_bit(b.occupancies[them], esq)) {
+                        int e_type = b.get_piece_on_square(esq);
+                        if (e_type != IRONPAWN) targets_found++;
+                    }
+                }
+            }
+            if (targets_found > 0) classical_score += targets_found * 300 * color_sign;
+        }
+
+        // HERO_PAWN: Scaling bonus the closer it gets to enemy King
+        U64 hero_pawns_prox = b.pieces[c][HERO_PAWN];
+        while (hero_pawns_prox) {
+            int sq = pop_lsb(hero_pawns_prox);
+            int r = sq / 8, fc = sq % 8;
+            U64 enemy_king = b.pieces[them][KING] | b.pieces[them][ROCKETMAN];
+            if (enemy_king) {
+                int ksq = get_lsb(enemy_king);
+                int kr = ksq / 8, kc = ksq % 8;
+                int dist_r = std::abs(r - kr);
+                int dist_c = std::abs(fc - kc);
+                int dist = std::max(dist_r, dist_c);
+                int proximity_bonus = std::max(0, 6 - dist);
+                classical_score += proximity_bonus * 150 * color_sign;
+            }
+        }
+
+        // WARP_JUMPER: Heavy progression bonus on A/H files
+        U64 warp_jumpers = b.pieces[c][WARP_JUMPER];
+        while (warp_jumpers) {
+            int sq = pop_lsb(warp_jumpers);
+            int r = sq / 8, fc = sq % 8;
+            int wp_rank = (c == WHITE) ? (7 - r) : r;
+            if (fc == 0 || fc == 7) {
+                classical_score += wp_rank * 250 * color_sign; // Fast track to promotion
+            } else {
+                classical_score += wp_rank * 50 * color_sign;
+            }
+        }
+
+        // WAR_AUTOMATON: Bonus if safely waiting behind own pieces
+        U64 war_automatons = b.pieces[c][WAR_AUTOMATON];
+        while (war_automatons) {
+            int sq = pop_lsb(war_automatons);
+            int r = sq / 8, fc = sq % 8;
+            int front_row = (c == WHITE) ? r - 1 : r + 1;
+            if (front_row >= 0 && front_row <= 7) {
+                int front_sq = front_row * 8 + fc;
+                if (get_bit(b.occupancies[c], front_sq)) {
+                    classical_score += 200 * color_sign; // Shielded
+                }
+            }
+        }
+
+        // EPEE_PAWN: Bonus based on how many enemy pawns are left (early/midgame presence)
+        U64 epee_pawns = b.pieces[c][EPEE_PAWN];
+        while (epee_pawns) {
+            int sq = pop_lsb(epee_pawns);
+            int enemy_pawns = popcount(b.pieces[them][PAWN]);
+            classical_score += enemy_pawns * 30 * color_sign;
+        }
     }
     
     int relative_classical = (b.side_to_move == WHITE) ? classical_score : -classical_score;

@@ -469,6 +469,65 @@ export function evaluate(board: Board, gameState: GameState, acc?: StatefulAccum
         const ironRank = piece.color === 'w' ? 7 - r : r;
         ability += sign * (ironRank * 0.3); // More valuable as it advances
       }
+      // ── PAWN_KNIFE: High threat if an enemy is in its strike zone ──
+      else if (piece.pixie === 'PAWN_KNIFE') {
+        const dir = piece.color === 'w' ? -1 : 1;
+        // dx = ±2, dy = 2 forward
+        let targetsFound = 0;
+        for (const dc of [-2, 2]) {
+          const er = r + (dir * 2);
+          const ec = c + dc;
+          if (inBounds(er, ec)) {
+            const target = board[er][ec];
+            if (target && target.color === enemyColor && !target.invulnerable) {
+              targetsFound++;
+            }
+          }
+        }
+        if (targetsFound > 0) threat += sign * (targetsFound * 3.0);
+      }
+      // ── HERO_PAWN: Incredible scaling bonus the closer it gets to enemy King ──
+      else if (piece.pixie === 'HERO_PAWN') {
+        let enemyKingSq = [-1, -1];
+        for (let er = 0; er < 8; er++) {
+          for (let ec = 0; ec < 8; ec++) {
+            if (board[er][ec]?.type === 'K' && board[er][ec]?.color === enemyColor) {
+              enemyKingSq = [er, ec];
+            }
+          }
+        }
+        if (enemyKingSq[0] !== -1) {
+          const dist = Math.max(Math.abs(r - enemyKingSq[0]), Math.abs(c - enemyKingSq[1]));
+          // The closer it gets, the higher the bonus (max 5)
+          const proximityBonus = Math.max(0, 6 - dist);
+          ability += sign * (proximityBonus * 1.5);
+        }
+      }
+      // ── WARP_JUMPER: Heavy progression bonus on A/H files ──
+      else if (piece.pixie === 'WARP_JUMPER') {
+        const wpRank = piece.color === 'w' ? 7 - r : r;
+        if (c === 0 || c === 7) {
+          winCond += sign * (wpRank * 2.5); // Fast tracking to rank 8
+        } else {
+          ability += sign * (wpRank * 0.5); // Slower tracking if not safe
+        }
+      }
+      // ── WAR_AUTOMATON: Bonus if safely waiting behind own pieces ──
+      else if (piece.pixie === 'WAR_AUTOMATON') {
+        const frontRow = piece.color === 'w' ? r - 1 : r + 1;
+        let isShielded = false;
+        if (inBounds(frontRow, c)) {
+          const frontPiece = board[frontRow][c];
+          if (frontPiece && frontPiece.color === piece.color) {
+            isShielded = true;
+          }
+        }
+        if (isShielded) ability += sign * 2.0;
+      }
+      // ── EPEE_PAWN: Global en passant is powerful in opening/midgame ──
+      else if (piece.pixie === 'EPEE_PAWN') {
+        ability += sign * (gamePhase * 2.5);
+      }
     }
   }
 

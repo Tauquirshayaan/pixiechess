@@ -288,6 +288,24 @@ export function evaluate(board: Board, gameState: GameState, acc?: StatefulAccum
         safety += sign * evaluateKingSafety(r, c, piece, board, gamePhase);
       }
 
+      // Positional Bonus (Center control)
+      if (c >= 2 && c <= 5 && r >= 2 && r <= 5) {
+        if (piece.type === 'P' || piece.type === 'N') ability += sign * 0.3;
+        if (piece.type === 'K') ability -= sign * 0.5; // Kings shouldn't wander to the center early
+      }
+
+      // ── PARALYSIS PENALTY (Basilisk) ──
+      const isParalyzed = gameState.paralyzed[piece.color as 'w' | 'b']?.some(sq => sq[0] === r && sq[1] === c);
+      if (isParalyzed) {
+        if (piece.type === 'K') {
+          winCond -= sign * 20.0; // King paralyzed is a massive vulnerability
+        } else if (piece.type === 'Q' || piece.pixie === 'FISSION_REACTOR') {
+          threat -= sign * 5.0; // High value piece neutralized
+        } else {
+          ability -= sign * 1.0; // Generic penalty for being paralyzed
+        }
+      }
+
       // 5. Ability State Bonuses
       if (piece.pixie === 'ELECTROKNIGHT') {
         if (piece.state?.is_charged) ability += sign * 3.0;

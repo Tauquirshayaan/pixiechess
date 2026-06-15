@@ -958,7 +958,75 @@ int evaluate(const Board& b) {
         while (epee_pawns) {
             int sq = pop_lsb(epee_pawns);
             int enemy_pawns = popcount(b.pieces[them][PAWN]);
-            classical_score += enemy_pawns * 30 * color_sign;
+            classical_score += enemy_pawns * 10 * color_sign;
+        }
+
+        // ============================================================
+        //  PHASE 16: BASILISK PARALYSIS THREATS
+        // ============================================================
+        U64 our_basilisks = b.pieces[c][BASILISK];
+        U64 their_basilisks = b.pieces[them][BASILISK];
+        
+        if (our_basilisks || their_basilisks) {
+            U64 paralyzed_by_us = 0ULL;
+            U64 temp_ob = our_basilisks;
+            while (temp_ob) {
+                int sq = pop_lsb(temp_ob);
+                paralyzed_by_us |= get_sliding_attacks(sq, b.occupancies[BOTH], true, false);
+            }
+            
+            U64 paralyzed_by_them = 0ULL;
+            U64 temp_tb = their_basilisks;
+            while (temp_tb) {
+                int sq = pop_lsb(temp_tb);
+                paralyzed_by_them |= get_sliding_attacks(sq, b.occupancies[BOTH], true, false);
+            }
+            
+            // 1. Enemy High-Value Targets Paralyzed
+            U64 enemy_queens = b.pieces[them][QUEEN] | b.pieces[them][FISSION_REACTOR];
+            while (enemy_queens) {
+                int sq = pop_lsb(enemy_queens);
+                if (get_bit(paralyzed_by_us, sq)) {
+                    classical_score += 500 * color_sign; // Queen Paralyzed
+                    if (b.is_square_attacked(sq, c)) {
+                        classical_score += 400 * color_sign; // And attacked!
+                    }
+                }
+            }
+            
+            U64 enemy_kings = b.pieces[them][KING] | b.pieces[them][ROCKETMAN];
+            while (enemy_kings) {
+                int sq = pop_lsb(enemy_kings);
+                if (get_bit(paralyzed_by_us, sq)) {
+                    classical_score += 800 * color_sign; // King Paralyzed
+                    if (b.is_square_attacked(sq, c)) {
+                        classical_score += 2000 * color_sign; // Checkmate threat!
+                    }
+                }
+            }
+            
+            // 2. Our High-Value Targets Paralyzed
+            U64 our_queens = b.pieces[c][QUEEN] | b.pieces[c][FISSION_REACTOR];
+            while (our_queens) {
+                int sq = pop_lsb(our_queens);
+                if (get_bit(paralyzed_by_them, sq)) {
+                    classical_score -= 500 * color_sign; 
+                    if (b.is_square_attacked(sq, them)) {
+                        classical_score -= 400 * color_sign; 
+                    }
+                }
+            }
+            
+            U64 our_kings = b.pieces[c][KING] | b.pieces[c][ROCKETMAN];
+            while (our_kings) {
+                int sq = pop_lsb(our_kings);
+                if (get_bit(paralyzed_by_them, sq)) {
+                    classical_score -= 800 * color_sign;
+                    if (b.is_square_attacked(sq, them)) {
+                        classical_score -= 2000 * color_sign;
+                    }
+                }
+            }
         }
     }
     

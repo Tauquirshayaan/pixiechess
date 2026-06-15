@@ -135,6 +135,22 @@ int evaluate(const Board& b) {
                     }
                 }
                 
+                // ---- QUEEN PRESERVATION ----
+                // The Queen should only be risked for decisive advantages. Preserve her heavily.
+                if (pt == QUEEN) {
+                    if (!is_endgame) {
+                        // Inflate Queen's material value early/mid-game to refuse bad trades
+                        piece_val += 200; 
+                        
+                        // Penalize early Queen sorties (pushing her into enemy territory without a secure advantage)
+                        int r = sq / 8;
+                        bool overextended = (c == WHITE) ? (r < 5) : (r > 2); // Ranks 4-8 for White
+                        if (overextended) {
+                            classical_score -= 50 * color_sign;
+                        }
+                    }
+                }
+                
                 // Pawn promotion priority when no Pilgrim is alive (to respawn Queen/Rook)
                 if ((pt == PAWN || (pt >= GOLDEN_PAWN && pt <= WAR_AUTOMATON)) && popcount(b.pieces[c][PILGRIM]) == 0) {
                     bool has_dead_queen = b.dead_pieces_count[c][QUEEN] > 0;
@@ -174,6 +190,15 @@ int evaluate(const Board& b) {
         //  Replaces the old broken QUEEN SAFETY that only checked standard pieces.
         // ============================================================
         
+        // ★★★★★★ Critical Asset: -80cp if hanging (Queen must be preserved at all costs)
+        U64 queen_bb = b.pieces[c][QUEEN];
+        while (queen_bb) {
+            int sq = pop_lsb(queen_bb);
+            if (b.is_square_attacked(sq, them)) {
+                classical_score -= 80 * color_sign;
+            }
+        }
+
         // ★★★★★ Game-Enders: -40cp if hanging (Search tree handles real material loss)
         const int five_star[] = { FISSION_REACTOR, MARAUDER };
         for (int i = 0; i < 2; i++) {
@@ -187,8 +212,8 @@ int evaluate(const Board& b) {
         }
         
         // ★★★★ High-Threat: -25cp if hanging
-        const int four_star[] = { QUEEN, PHASE_ROOK, ROOK, SUMOROOK, BASILISK, ICICLE, ARISTOCRAT, PILGRIM };
-        for (int i = 0; i < 8; i++) {
+        const int four_star[] = { PHASE_ROOK, ROOK, SUMOROOK, BASILISK, ICICLE, ARISTOCRAT, PILGRIM };
+        for (int i = 0; i < 7; i++) {
             U64 pbb = b.pieces[c][four_star[i]];
             while (pbb) {
                 int sq = pop_lsb(pbb);

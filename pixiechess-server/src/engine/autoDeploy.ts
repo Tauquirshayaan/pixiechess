@@ -179,9 +179,12 @@ export function autoDeploy(board: Board, gameState: GameState, color: 'w' | 'b',
 
         // Always add our strategic placement bonus on top (works even when NNUE is absent)
         const pBonus = placementBonus(baseType, pixieName, r, c, color);
+        // Add tiny random noise to break ties unpredictably so Black and White don't perfectly mirror
+        const noise = Math.random() * 0.1;
+        
         // For white, higher score is better. For black, lower score is better.
         // We normalize: always maximize the "value for our side"
-        const signedBonus = color === 'w' ? pBonus : -pBonus;
+        const signedBonus = color === 'w' ? (pBonus + noise) : -(pBonus + noise);
         score += signedBonus;
 
         // Normalize: always compare as "white-perspective" value for our color

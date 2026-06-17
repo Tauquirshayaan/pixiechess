@@ -563,12 +563,14 @@ function generateCardinal(pixie: { sq: number, color: 'w' | 'b' }, state: Bitboa
     moves.push(createMove(pixie.sq, to, isCapture));
   }
   
-  // Single backwards step
-  const b = bit(pixie.sq);
-  const backStep = pixie.color === 'w' ? (b << 8n) : (b >> 8n);
-  const validBackStep = backStep & state.empty;
-  for (const to of iterBits(validBackStep)) {
-    moves.push(createMove(pixie.sq, to, false));
+  // Single backwards step (non-capturing)
+  // In TS engine: White starts at bottom (high index), moves UP (sq - 8). 
+  // Therefore, backward for White is sq + 8.
+  const backStep = pixie.color === 'w' ? pixie.sq + 8 : pixie.sq - 8;
+  if (backStep >= 0 && backStep < 64) {
+    if ((bit(backStep) & state.occupied) === ZERO) {
+      moves.push(createMove(pixie.sq, backStep, false));
+    }
   }
 }
 

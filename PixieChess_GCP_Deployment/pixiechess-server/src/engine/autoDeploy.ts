@@ -162,17 +162,17 @@ export function autoDeploy(board: Board, gameState: GameState, color: 'w' | 'b',
     }
   }
 
-  const slotsLeft = 6 - alreadyDeployed;
+  let slotsLeft = 6 - alreadyDeployed;
   if (slotsLeft <= 0 || loadout.length === 0) return newBoard;
 
-  // Build the deploy list: only pieces from loadout not yet on board, up to slotsLeft
+  // Build the deploy list: only pieces from loadout not yet on board
   const toDeployList = [...new Set(loadout)]
-    .filter(px => !onBoard.has(px))
-    .slice(0, slotsLeft);
+    .filter(px => !onBoard.has(px));
 
   if (toDeployList.length === 0) return newBoard;
 
   // Sort by strategic value: higher base value first, then by danger score
+  // This helps break ties and prioritize the most deadly pieces
   toDeployList.sort((a, b) => {
     const catA = PIECE_CATALOG[a as keyof typeof PIECE_CATALOG];
     const catB = PIECE_CATALOG[b as keyof typeof PIECE_CATALOG];
@@ -205,7 +205,7 @@ export function autoDeploy(board: Board, gameState: GameState, color: 'w' | 'b',
   const usedSquares = new Set<string>();
 
   // Greedy placement: pick the globally best (pixie, square) pair each round
-  while (remainingLoadout.length > 0) {
+  while (remainingLoadout.length > 0 && slotsLeft > 0) {
     let bestScore = -Infinity;
     let bestChoice: { pixieIndex: number, square: [number, number], powerPiece: Piece } | null = null;
 
@@ -259,7 +259,7 @@ export function autoDeploy(board: Board, gameState: GameState, color: 'w' | 'b',
       }
     }
 
-    if (!bestChoice) break; // No valid placement found
+    if (!bestChoice) break; // No valid placement found across all remaining loadout pieces
 
     // Commit
     const { pixieIndex, square: [br, bc], powerPiece } = bestChoice;
@@ -276,6 +276,7 @@ export function autoDeploy(board: Board, gameState: GameState, color: 'w' | 'b',
 
     usedSquares.add(`${br},${bc}`);
     remainingLoadout.splice(pixieIndex, 1);
+    slotsLeft--;
   }
 
   return newBoard;

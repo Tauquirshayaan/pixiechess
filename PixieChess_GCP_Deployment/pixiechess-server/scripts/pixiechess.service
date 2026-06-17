@@ -1,0 +1,37 @@
+[Unit]
+Description=Pixie Chess Grandmaster Engine Server
+After=network.target
+Wants=network.target
+
+[Service]
+# Run as a dedicated non-root service user
+User=pixiechess
+Group=pixiechess
+WorkingDirectory=/opt/pixiechess/pixiechess-server
+
+# Server runtime — uses ts-node to run TypeScript directly
+# This avoids a separate compile step and matches how you develop locally.
+ExecStart=/usr/bin/npx ts-node src/server.ts
+
+# Environment
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=FRONTEND_DIST=/opt/pixiechess/pixiechess-bot/dist
+
+# Auto-restart policy
+Restart=always
+RestartSec=5s
+StartLimitIntervalSec=60s
+StartLimitBurst=5
+
+# Resource limits — leave headroom for NNUE training
+# The C++ engine subprocess uses up to 8 threads, handled by MAX_VCPUS in server.ts
+LimitNOFILE=65536
+
+# Logging — view with: journalctl -u pixiechess -f
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=pixiechess
+
+[Install]
+WantedBy=multi-user.target

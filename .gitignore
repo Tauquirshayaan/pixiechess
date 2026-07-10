@@ -1,0 +1,7 @@
+# Large backups and temporary extraction folders
+*.zip
+temp_extract/
+temp_extract_v44/
+
+# WebAssembly toolchain (very large)
+emsdk/

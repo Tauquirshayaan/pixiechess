@@ -1,0 +1,491 @@
+[
+  {
+    "fen": "startpos",
+    "classes": [
+      "Standard",
+      "Opening"
+    ],
+    "eval": {
+      "phase": 0.8,
+      "material": 0,
+      "mobility": 0,
+      "center_control": 0,
+      "development": 0,
+      "threats": 0,
+      "king_safety": 0,
+      "power_potential": 0,
+      "total": 0,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": false,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+    "classes": [
+      "Standard",
+      "Opening",
+      "Open Position"
+    ],
+    "eval": {
+      "phase": 0.8,
+      "material": 0,
+      "mobility": -9,
+      "center_control": -8,
+      "development": 0,
+      "threats": 0,
+      "king_safety": 0,
+      "power_potential": -8,
+      "total": -25,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": true,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "r2qk2r/ppp2ppp/2n1b3/2bnp3/2B5/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 2 8",
+    "classes": [
+      "Standard",
+      "Middlegame"
+    ],
+    "eval": {
+      "phase": 0.8,
+      "material": 0,
+      "mobility": -15,
+      "center_control": 32,
+      "development": 0,
+      "threats": 20,
+      "king_safety": 0,
+      "power_potential": -57,
+      "total": -20,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": true,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "2rq1rk1/pp1b1p1p/4p1p1/n2pP3/3P4/P1PB1N2/5PPP/1R1Q1RK1 w - - 3 16",
+    "classes": [
+      "Standard",
+      "Middlegame",
+      "Closed Center"
+    ],
+    "eval": {
+      "phase": 0.6375,
+      "material": 0,
+      "mobility": 0,
+      "center_control": 0,
+      "development": 7,
+      "threats": 15,
+      "king_safety": 0,
+      "power_potential": 142,
+      "total": 164,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": false,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "8/8/8/4k3/4P3/4K3/8/8 w - - 0 1",
+    "classes": [
+      "Standard",
+      "Endgame"
+    ],
+    "eval": {
+      "phase": 0,
+      "material": 0,
+      "mobility": 0,
+      "center_control": 0,
+      "development": 0,
+      "threats": 0,
+      "king_safety": 0,
+      "power_potential": 185,
+      "total": 185,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": false,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "8/1p6/p7/P1P5/1P6/8/4K1k1/8 w - - 0 1",
+    "classes": [
+      "Standard",
+      "Endgame",
+      "Pawn Structure"
+    ],
+    "eval": {
+      "phase": 0,
+      "material": 0,
+      "mobility": 0,
+      "center_control": 0,
+      "development": 0,
+      "threats": 0,
+      "king_safety": 0,
+      "power_potential": 120,
+      "total": 120,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": false,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "M1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+    "classes": [
+      "Power Pieces",
+      "Opening",
+      "Knightmare Dominance"
+    ],
+    "eval": {
+      "phase": 0.7375,
+      "material": 0,
+      "mobility": -9,
+      "center_control": -7,
+      "development": 0,
+      "threats": 0,
+      "king_safety": -43,
+      "power_potential": 902,
+      "total": 843,
+      "power_pieces": {
+        "knightmare": {
+          "material": 360,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 360
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": true,
+        "limbo_active": true,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQK1R1 w KQkq - 2 3",
+    "classes": [
+      "Power Pieces",
+      "Opening",
+      "Phaserook"
+    ],
+    "eval": {
+      "phase": 0.75875,
+      "material": 0,
+      "mobility": -9,
+      "center_control": -7,
+      "development": 0,
+      "threats": 0,
+      "king_safety": 0,
+      "power_potential": -297,
+      "total": -313,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": true,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQ1K2 w KQkq - 2 3",
+    "classes": [
+      "Power Pieces",
+      "Opening",
+      "Fission Reactor"
+    ],
+    "eval": {
+      "phase": 0.69625,
+      "material": 0,
+      "mobility": -6,
+      "center_control": -20,
+      "development": 0,
+      "threats": 0,
+      "king_safety": 41,
+      "power_potential": -786,
+      "total": -771,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": false,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "8/8/8/4k3/4M3/4K3/8/8 w - - 0 1",
+    "classes": [
+      "Power Pieces",
+      "Endgame",
+      "Knightmare Dominance"
+    ],
+    "eval": {
+      "phase": 0,
+      "material": 0,
+      "mobility": 0,
+      "center_control": 0,
+      "development": 0,
+      "threats": -10,
+      "king_safety": 180,
+      "power_potential": 372,
+      "total": 542,
+      "power_pieces": {
+        "knightmare": {
+          "material": 360,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 360
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": false,
+        "limbo_active": true,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "r3k2r/pppq1ppp/2np1n2/2b1p3/2B1P3/2NP1Q1P/PPP2PP1/R1B2RK1 w kq - 1 9",
+    "classes": [
+      "Standard",
+      "Middlegame",
+      "King Attack"
+    ],
+    "eval": {
+      "phase": 0.71875,
+      "material": 0,
+      "mobility": 6,
+      "center_control": 40,
+      "development": 0,
+      "threats": 25,
+      "king_safety": 0,
+      "power_potential": -109,
+      "total": -38,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": true,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  },
+  {
+    "fen": "rnbq1rk1/ppp2ppp/4pn2/3p4/2PP4/P1P2N2/4PPPP/R1BQKB1R w KQ - 1 7",
+    "classes": [
+      "Standard",
+      "Opening",
+      "Closed Center"
+    ],
+    "eval": {
+      "phase": 0.71875,
+      "material": 0,
+      "mobility": 3,
+      "center_control": -40,
+      "development": 0,
+      "threats": -15,
+      "king_safety": 0,
+      "power_potential": -136,
+      "total": -188,
+      "power_pieces": {
+        "knightmare": {
+          "material": 0,
+          "limbo_persistence": 0,
+          "ambush_platform": 0,
+          "deployment_readiness": 0,
+          "behind_king_pressure": 0,
+          "trapped_penalty": 0,
+          "total": 0
+        },
+        "marauder": 0,
+        "phaserook": 0,
+        "electroknight": 0,
+        "djinn": 0
+      },
+      "flags": {
+        "supported_center_pawn": true,
+        "limbo_active": false,
+        "electro_charge_ready": false,
+        "passed_pawn_bonus": false,
+        "king_under_attack": false
+      }
+    }
+  }
+]

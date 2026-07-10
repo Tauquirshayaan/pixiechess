@@ -1,0 +1,5 @@
+position startpos
+go depth 4
+position fen r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3
+go depth 4
+quit

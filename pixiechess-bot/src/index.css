@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Fira+Code:wght@400;500&display=block');
+
+:root {
+  --color-background: #F4F0FA;
+  --color-primary: #7C3AED;
+  --color-secondary: #60A5FA;
+  --color-danger: #EF4444;
+  --color-freeze: #BAE6FD;
+  --color-gold: #FFD700;
+}
+
+html {
+  /* Prevent any browser auto-scaling on small screens */
+  min-width: 1024px;
+}
+
+body {
+  background-color: #F4F0FA !important;
+  color: #1E1535;
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+  /* Inherit Inter everywhere */
+  font-family: inherit;
+}
+
+/* Headings keep their own styling but still use Inter */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+

@@ -1,0 +1,3 @@
+position startpos
+setoption name threads value 1
+go depth 15 movetime 500

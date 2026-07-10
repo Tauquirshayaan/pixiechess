@@ -1,0 +1,465 @@
+#include "movegen.h"
+#include "bitboard.h"
+#include <iostream>
+
+// ── PRECOMPUTED LEAPER MASKS ──
+U64 KNIGHT_ATTACKS[64];
+U64 KING_ATTACKS[64];
+
+// Helper to prevent off-board wrapping
+inline U64 shift_left(U64 b) { return (b << 1) & 0xfefefefefefefefeULL; }
+inline U64 shift_right(U64 b) { return (b >> 1) & 0x7f7f7f7f7f7f7f7fULL; }
+
+void init_leaper_masks() {
+    for (int sq = 0; sq < 64; sq++) {
+        U64 bit = 1ULL << sq;
+        
+        // King Attacks
+        U64 k = shift_left(bit) | shift_right(bit);
+        k |= bit; // Include origin for vertical shifts
+        U64 k_attacks = k | (k << 8) | (k >> 8);
+        KING_ATTACKS[sq] = k_attacks & ~(1ULL << sq); // Remove origin
+        
+        // Knight Attacks
+        U64 n_attacks = 0ULL;
+        // Up-left/Up-right
+        n_attacks |= shift_left(bit << 16) | shift_right(bit << 16);
+        // Down-left/Down-right
+        n_attacks |= shift_left(bit >> 16) | shift_right(bit >> 16);
+        // Left-up/Left-down (shift by 2 requires special mask)
+        U64 left2 = (bit >> 2) & 0x3f3f3f3f3f3f3f3fULL;
+        n_attacks |= (left2 << 8) | (left2 >> 8);
+        // Right-up/Right-down
+        U64 right2 = (bit << 2) & 0xfcfcfcfcfcfcfcfcULL;
+        n_attacks |= (right2 << 8) | (right2 >> 8);
+        
+        KNIGHT_ATTACKS[sq] = n_attacks;
+    }
+}
+
+// ── MOVE GENERATION ──
+void generate_pseudo_legal_moves(const Board& b, MoveList& list) {
+    Color us = b.side_to_move;
+    Color them = (us == WHITE) ? BLACK : WHITE;
+    
+    U64 invulnerable = b.pieces[WHITE][IRONPAWN] | b.pieces[BLACK][IRONPAWN];
+    
+    U64 our_pieces = b.occupancies[us] | invulnerable;
+    U64 enemy_pieces = b.occupancies[them] & ~invulnerable;
+    U64 all_pieces = b.occupancies[BOTH];
+    U64 empty_squares = ~all_pieces;
+    
+    // Calculate Auras (Paralysis & Freeze)
+    U64 paralyzed_squares = 0ULL;
+    
+    // 1. Enemy Basilisks (Diagonal LOS Paralysis)
+    U64 enemy_basilisks = b.pieces[them][BASILISK];
+    while (enemy_basilisks) {
+        int b_sq = pop_lsb(enemy_basilisks);
+        paralyzed_squares |= get_sliding_attacks(b_sq, all_pieces, true, false);
+    }
+    
+    // (Icicle only freezes when captured, which is handled via ability_tracker.frozen_turns)
+    
+    // 2.5 Explicitly Frozen Pieces (from ability tracker)
+    for (int sq = 0; sq < 64; ++sq) {
+        if (b.ability_tracker[sq].frozen_turns > 0) {
+            paralyzed_squares |= (1ULL << sq);
+            
+            // Generate Unfreeze Move (skips turn to decrement freeze)
+            if (get_bit(our_pieces, sq)) {
+                int p_type = b.get_piece_on_square(sq);
+                if (p_type != PIECE_TYPE_NONE) {
+                    list.add(Move(sq, sq, p_type, ICICLE, PIECE_TYPE_NONE, false, true));
+                }
+            }
+        }
+    }
+    
+    // 3. Anti-Violence Aura: pieces in this aura CANNOT capture
+    U64 av_aura = 0ULL;
+    U64 enemy_av = b.pieces[them][ANTI_VIOLENCE];
+    while (enemy_av) {
+        int av_sq = pop_lsb(enemy_av);
+        av_aura |= KING_ATTACKS[av_sq];
+    }
+    
+    // 1. STANDARD KNIGHTS + PIXIE KNIGHTS
+    U64 knights = (b.pieces[us][KNIGHT] | b.pieces[us][ELECTROKNIGHT] | b.pieces[us][BANKER] | 
+                   b.pieces[us][KNIGHTMARE] | b.pieces[us][FISH_KNIGHT]) & ~paralyzed_squares;
+    while (knights) {
+        int sq = pop_lsb(knights);
+        int type = b.get_piece_on_square(sq);
+        U64 attacks = KNIGHT_ATTACKS[sq] & ~our_pieces;
+        // Anti-Violence: if this piece is in the aura, it cannot capture
+        if (get_bit(av_aura, sq)) attacks &= ~enemy_pieces;
+        
+        while (attacks) {
+            int to_sq = pop_lsb(attacks);
+            bool is_capture = get_bit(enemy_pieces, to_sq);
+            int captured_piece = is_capture ? b.get_piece_on_square(to_sq) : PIECE_TYPE_NONE;
+            list.add(Move(sq, to_sq, type, captured_piece, PIECE_TYPE_NONE, is_capture, false));
+        }
+    }
+
+
+
+
+
+
+
+
+
+    // 2. STANDARD KINGS + PIXIE KINGS
+    U64 kings = b.pieces[us][KING] & ~paralyzed_squares;
+    while (kings) {
+        int sq = pop_lsb(kings);
+        int type = b.get_piece_on_square(sq);
+        U64 attacks = KING_ATTACKS[sq] & ~our_pieces;
+        if (get_bit(av_aura, sq)) attacks &= ~enemy_pieces;
+        
+        while (attacks) {
+            int to_sq = pop_lsb(attacks);
+            bool is_capture = get_bit(enemy_pieces, to_sq);
+            int captured_piece = is_capture ? b.get_piece_on_square(to_sq) : PIECE_TYPE_NONE;
+            list.add(Move(sq, to_sq, type, captured_piece, PIECE_TYPE_NONE, is_capture, false));
+        }
+    }
+    
+    U64 bishops = (b.pieces[us][BISHOP] | b.pieces[us][QUEEN] | b.pieces[us][FISSION_REACTOR] |
+                   b.pieces[us][ARISTOCRAT] | b.pieces[us][PILGRIM] | 
+                   b.pieces[us][DANCER] | b.pieces[us][DJINN] | b.pieces[us][GUNSLINGER] | 
+                   b.pieces[us][CARDINAL]) & ~paralyzed_squares;
+    while (bishops) {
+        int sq = pop_lsb(bishops);
+        int type = b.get_piece_on_square(sq); 
+        U64 attacks = get_sliding_attacks(sq, all_pieces, true, false) & ~our_pieces;
+        if (get_bit(av_aura, sq)) attacks &= ~enemy_pieces;
+        
+        while (attacks) {
+            int to_sq = pop_lsb(attacks);
+            bool is_capture = get_bit(enemy_pieces, to_sq);
+            int captured_piece = is_capture ? b.get_piece_on_square(to_sq) : PIECE_TYPE_NONE;
+            list.add(Move(sq, to_sq, type, captured_piece, PIECE_TYPE_NONE, is_capture, false));
+        }
+    }
+    
+
+    
+    U64 rooks = (b.pieces[us][ROOK] | b.pieces[us][QUEEN] | b.pieces[us][FISSION_REACTOR]) & ~paralyzed_squares;
+    while (rooks) {
+        int sq = pop_lsb(rooks);
+        int type = b.get_piece_on_square(sq);
+        U64 attacks = get_sliding_attacks(sq, all_pieces, false, true) & ~our_pieces;
+        if (get_bit(av_aura, sq)) attacks &= ~enemy_pieces;
+        
+        while (attacks) {
+            int to_sq = pop_lsb(attacks);
+            bool is_capture = get_bit(enemy_pieces, to_sq);
+            int captured_piece = is_capture ? b.get_piece_on_square(to_sq) : PIECE_TYPE_NONE;
+            list.add(Move(sq, to_sq, type, captured_piece, PIECE_TYPE_NONE, is_capture, false));
+        }
+    }
+
+
+
+    // SumoRook: Can only move to empty squares (push logic handles captures as side-effects)
+    U64 sumorooks = b.pieces[us][SUMOROOK] & ~paralyzed_squares;
+    while (sumorooks) {
+        int sq = pop_lsb(sumorooks);
+        int type = b.get_piece_on_square(sq);
+        U64 raw_attacks = get_sliding_attacks(sq, all_pieces, false, true);
+        U64 attacks = raw_attacks & empty_squares;
+        
+        while (attacks) {
+            int to_sq = pop_lsb(attacks);
+            
+            int r = to_sq / 8;
+            int c = to_sq % 8;
+            int fr = sq / 8;
+            int fc = sq % 8;
+            
+            int dr = r - fr;
+            int dc = c - fc;
+            int step_r = (dr == 0) ? 0 : (dr > 0 ? 1 : -1);
+            int step_c = (dc == 0) ? 0 : (dc > 0 ? 1 : -1);
+            
+            int er = r + step_r;
+            int ec = c + step_c;
+            
+            bool is_invalid = false;
+            if (er >= 0 && er < 8 && ec >= 0 && ec < 8 && (step_r != 0 || step_c != 0)) {
+                int esq = er * 8 + ec;
+                if (get_bit(all_pieces, esq)) {
+                    int p1_type = b.get_piece_on_square(esq);
+                    int p1_color = get_bit(b.occupancies[WHITE], esq) ? WHITE : BLACK;
+                    
+                    auto dist_to_falloff = [&](int r_pos, int c_pos) {
+                        int r_dist = step_r != 0 ? (step_r < 0 ? r_pos : 7 - r_pos) : 99;
+                        int c_dist = step_c != 0 ? (step_c < 0 ? c_pos : 7 - c_pos) : 99;
+                        return (r_dist < c_dist) ? r_dist : c_dist;
+                    };
+                    
+                    if (p1_color == us && p1_type == KING) {
+                        int safe_dist = dist_to_falloff(er, ec);
+                        bool has_p2 = false;
+                        int p2_r = er + step_r;
+                        int p2_c = ec + step_c;
+                        if (p2_r >= 0 && p2_r < 8 && p2_c >= 0 && p2_c < 8) {
+                            if (get_bit(b.occupancies[BOTH], p2_r * 8 + p2_c)) {
+                                has_p2 = true;
+                            }
+                        }
+                        int max_slide = has_p2 ? 1 : 2;
+                        int slide_dist = 0;
+                        int cur_r = (has_p2 ? p2_r : er) + step_r;
+                        int cur_c = (has_p2 ? p2_c : ec) + step_c;
+                        for (int step = 0; step < max_slide; step++) {
+                            if (cur_r >= 0 && cur_r < 8 && cur_c >= 0 && cur_c < 8) {
+                                if (get_bit(b.occupancies[BOTH], cur_r * 8 + cur_c)) {
+                                    break;
+                                }
+                            }
+                            slide_dist++;
+                            cur_r += step_r;
+                            cur_c += step_c;
+                        }
+                        if (safe_dist < slide_dist) {
+                            is_invalid = true;
+                        }
+                    }
+                    
+                    if (!is_invalid) {
+                        int p2_r = er + step_r;
+                        int p2_c = ec + step_c;
+                        if (p2_r >= 0 && p2_r < 8 && p2_c >= 0 && p2_c < 8) {
+                            int p2_sq = p2_r * 8 + p2_c;
+                            if (get_bit(all_pieces, p2_sq)) {
+                                int p2_type = b.get_piece_on_square(p2_sq);
+                                int p2_color = get_bit(b.occupancies[WHITE], p2_sq) ? WHITE : BLACK;
+                                if (p2_color == us && p2_type == KING) {
+                                    int safe_dist = dist_to_falloff(p2_r, p2_c);
+                                    int slide_dist = 0;
+                                    int cur_r = p2_r + step_r;
+                                    int cur_c = p2_c + step_c;
+                                    for (int step = 0; step < 1; step++) {
+                                        if (cur_r >= 0 && cur_r < 8 && cur_c >= 0 && cur_c < 8) {
+                                            if (get_bit(b.occupancies[BOTH], cur_r * 8 + cur_c)) {
+                                                break;
+                                            }
+                                        }
+                                        slide_dist++;
+                                        cur_r += step_r;
+                                        cur_c += step_c;
+                                    }
+                                    if (safe_dist < slide_dist) {
+                                        is_invalid = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (!is_invalid) {
+                list.add(Move(sq, to_sq, type, PIECE_TYPE_NONE, PIECE_TYPE_NONE, false, true)); // flag as ability
+            }
+        }
+    }
+
+
+
+    // 4. STANDARD PAWNS (And Golden, Hero, Iron, etc.)
+    U64 pawns = (b.pieces[us][PAWN] | b.pieces[us][GOLDEN_PAWN] |
+                 b.pieces[us][EPEE_PAWN] | b.pieces[us][PAWN_KNIFE] | 
+                 b.pieces[us][HERO_PAWN] | b.pieces[us][WAR_AUTOMATON] | b.pieces[us][WARP_JUMPER] | b.pieces[us][SHRIKE] | b.pieces[us][HORDELING]) & ~paralyzed_squares;
+    
+    bool aristocrat_blocks = b.pieces[them][ARISTOCRAT] != 0ULL;
+    auto add_pawn_move = [&](int from_sq, int to_sq, int type, bool is_cap, int cap_type, bool is_ep) {
+        int prom_rank = (us == WHITE) ? 7 : 0;
+        if (to_sq / 8 == prom_rank && !aristocrat_blocks && type != HORDELING) {
+            list.add(Move(from_sq, to_sq, type, cap_type, QUEEN, is_cap, false));
+            list.add(Move(from_sq, to_sq, type, cap_type, ROOK, is_cap, false));
+            list.add(Move(from_sq, to_sq, type, cap_type, BISHOP, is_cap, false));
+            list.add(Move(from_sq, to_sq, type, cap_type, KNIGHT, is_cap, false));
+        } else {
+            list.add(Move(from_sq, to_sq, type, cap_type, PIECE_TYPE_NONE, is_cap, is_ep));
+        }
+    };
+    
+    if (us == WHITE) {
+        // Single pushes
+        U64 single_pushes = (pawns << 8) & empty_squares;
+        U64 sp = single_pushes;
+        while (sp) {
+            int to_sq = pop_lsb(sp);
+            int from_sq = to_sq - 8;
+            add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), false, PIECE_TYPE_NONE, false);
+        }
+        
+        // Double pushes
+        U64 double_pushes = ((single_pushes & 0x0000000000FF0000ULL) << 8) & empty_squares;
+        U64 dp = double_pushes;
+        while (dp) {
+            int to_sq = pop_lsb(dp);
+            int from_sq = to_sq - 16;
+            add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), false, PIECE_TYPE_NONE, false);
+        }
+        
+        // Captures Right (pawns NOT in Anti-Violence aura)
+        U64 cap_pawns = pawns & ~av_aura;
+        U64 cap_right = ((cap_pawns & 0x7F7F7F7F7F7F7F7FULL) << 9) & enemy_pieces;
+        U64 cr = cap_right;
+        while (cr) {
+            int to_sq = pop_lsb(cr);
+            int from_sq = to_sq - 9;
+            add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), true, b.get_piece_on_square(to_sq), false);
+        }
+        
+        // Captures Left
+        U64 cap_left = ((cap_pawns & 0xFEFEFEFEFEFEFEFEULL) << 7) & enemy_pieces;
+        U64 cl = cap_left;
+        while (cl) {
+            int to_sq = pop_lsb(cl);
+            int from_sq = to_sq - 7;
+            add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), true, b.get_piece_on_square(to_sq), false);
+        }
+        
+        // En Passant
+        if (b.en_passant_sq != NO_SQ) {
+            int cap_sq = b.en_passant_sq - 8;
+            if (!get_bit(invulnerable, cap_sq)) {
+                U64 ep_bb = 1ULL << b.en_passant_sq;
+                U64 ep_right = ((cap_pawns & 0x7F7F7F7F7F7F7F7FULL) << 9) & ep_bb;
+                if (ep_right) {
+                    int to_sq = b.en_passant_sq;
+                    int from_sq = to_sq - 9;
+                    add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), true, b.get_piece_on_square(cap_sq), true);
+                }
+                U64 ep_left = ((cap_pawns & 0xFEFEFEFEFEFEFEFEULL) << 7) & ep_bb;
+                if (ep_left) {
+                    int to_sq = b.en_passant_sq;
+                    int from_sq = to_sq - 7;
+                    add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), true, b.get_piece_on_square(cap_sq), true);
+                }
+            }
+            
+            // EPEE PAWN GLOBAL EN PASSANT
+            U64 epees = b.pieces[us][EPEE_PAWN] & ~paralyzed_squares;
+            while (epees) {
+                int epee_sq = pop_lsb(epees);
+                add_pawn_move(epee_sq, b.en_passant_sq, EPEE_PAWN, true, b.get_piece_on_square(cap_sq), true);
+            }
+        }
+    } else {
+        // Single pushes
+        U64 single_pushes = (pawns >> 8) & empty_squares;
+        U64 sp = single_pushes;
+        while (sp) {
+            int to_sq = pop_lsb(sp);
+            int from_sq = to_sq + 8;
+            add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), false, PIECE_TYPE_NONE, false);
+        }
+        
+        // Double pushes
+        U64 double_pushes = ((single_pushes & 0x0000FF0000000000ULL) >> 8) & empty_squares;
+        U64 dp = double_pushes;
+        while (dp) {
+            int to_sq = pop_lsb(dp);
+            int from_sq = to_sq + 16;
+            add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), false, PIECE_TYPE_NONE, false);
+        }
+        
+        // Captures Right (pawns NOT in Anti-Violence aura)
+        U64 cap_pawns = pawns & ~av_aura;
+        U64 cap_right = ((cap_pawns & 0x7F7F7F7F7F7F7F7FULL) >> 7) & enemy_pieces;
+        U64 cr = cap_right;
+        while (cr) {
+            int to_sq = pop_lsb(cr);
+            int from_sq = to_sq + 7;
+            add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), true, b.get_piece_on_square(to_sq), false);
+        }
+        
+        // Captures Left
+        U64 cap_left = ((cap_pawns & 0xFEFEFEFEFEFEFEFEULL) >> 9) & enemy_pieces;
+        U64 cl = cap_left;
+        while (cl) {
+            int to_sq = pop_lsb(cl);
+            int from_sq = to_sq + 9;
+            add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), true, b.get_piece_on_square(to_sq), false);
+        }
+        
+        // En Passant
+        if (b.en_passant_sq != NO_SQ) {
+            int cap_sq = b.en_passant_sq + 8;
+            if (!get_bit(invulnerable, cap_sq)) {
+                U64 ep_bb = 1ULL << b.en_passant_sq;
+                U64 ep_right = ((cap_pawns & 0x7F7F7F7F7F7F7F7FULL) >> 7) & ep_bb;
+                if (ep_right) {
+                    int to_sq = b.en_passant_sq;
+                    int from_sq = to_sq + 7;
+                    add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), true, b.get_piece_on_square(cap_sq), true);
+                }
+                U64 ep_left = ((cap_pawns & 0xFEFEFEFEFEFEFEFEULL) >> 9) & ep_bb;
+                if (ep_left) {
+                    int to_sq = b.en_passant_sq;
+                    int from_sq = to_sq + 9;
+                    add_pawn_move(from_sq, to_sq, b.get_piece_on_square(from_sq), true, b.get_piece_on_square(cap_sq), true);
+                }
+            }
+            
+            // EPEE PAWN GLOBAL EN PASSANT
+            U64 epees = b.pieces[us][EPEE_PAWN] & ~paralyzed_squares;
+            while (epees) {
+                int epee_sq = pop_lsb(epees);
+                add_pawn_move(epee_sq, b.en_passant_sq, EPEE_PAWN, true, b.get_piece_on_square(cap_sq), true);
+            }
+        }
+    }
+
+
+
+
+
+    // 5. CASTLING — only generate if the King is actually on the castling origin square
+    if (us == WHITE) {
+        bool white_king_on_e1 = get_bit(b.pieces[WHITE][KING], E1);
+        if (white_king_on_e1) {
+            int k_type = KING;
+            if (b.castling_rights & 1) { // White King-side (WK)
+                if (!get_bit(all_pieces, F1) && !get_bit(all_pieces, G1)) {
+                    if (!b.is_square_attacked(E1, BLACK) && !b.is_square_attacked(F1, BLACK) && !b.is_square_attacked(G1, BLACK)) {
+                        list.add(Move(E1, G1, k_type, PIECE_TYPE_NONE, PIECE_TYPE_NONE, false, false));
+                    }
+                }
+            }
+            if (b.castling_rights & 2) { // White Queen-side (WQ)
+                if (!get_bit(all_pieces, D1) && !get_bit(all_pieces, C1) && !get_bit(all_pieces, B1)) {
+                    if (!b.is_square_attacked(E1, BLACK) && !b.is_square_attacked(D1, BLACK) && !b.is_square_attacked(C1, BLACK)) {
+                        list.add(Move(E1, C1, k_type, PIECE_TYPE_NONE, PIECE_TYPE_NONE, false, false));
+                    }
+                }
+            }
+        }
+    } else {
+        bool black_king_on_e8 = get_bit(b.pieces[BLACK][KING], E8);
+        if (black_king_on_e8) {
+            int k_type = KING;
+            if (b.castling_rights & 4) { // Black King-side (BK)
+                if (!get_bit(all_pieces, F8) && !get_bit(all_pieces, G8)) {
+                    if (!b.is_square_attacked(E8, WHITE) && !b.is_square_attacked(F8, WHITE) && !b.is_square_attacked(G8, WHITE)) {
+                        list.add(Move(E8, G8, k_type, PIECE_TYPE_NONE, PIECE_TYPE_NONE, false, false));
+                    }
+                }
+            }
+            if (b.castling_rights & 8) { // Black Queen-side (BQ)
+                if (!get_bit(all_pieces, D8) && !get_bit(all_pieces, C8) && !get_bit(all_pieces, B8)) {
+                    if (!b.is_square_attacked(E8, WHITE) && !b.is_square_attacked(D8, WHITE) && !b.is_square_attacked(C8, WHITE)) {
+                        list.add(Move(E8, C8, k_type, PIECE_TYPE_NONE, PIECE_TYPE_NONE, false, false));
+                    }
+                }
+            }
+        }
+    }
+}

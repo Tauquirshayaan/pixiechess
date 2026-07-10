@@ -1,0 +1,3 @@
+info string NNUE missing, falling back to Classical evaluation.
+info string PFEN loaded successfully
+info string Received: go depth 15 movetime 500 

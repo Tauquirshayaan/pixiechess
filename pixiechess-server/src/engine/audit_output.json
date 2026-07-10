@@ -1,0 +1,232 @@
+info string NNUE missing, falling back to Classical evaluation.
+info string PFEN loaded successfully
+info string Received: uci
+id name PixieChess Grandmaster Engine v3.2.1
+id author Shayaan
+option name Threads type spin default 1 min 1 max 8
+option name MultiPV type spin default 1 min 1 max 5
+option name Hash type spin default 1024 min 1 max 8192
+uciok
+info string Received: position pfen 3,1,2,4,5,2,-1,3,0,0,0,0,-1,0,0,0,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,100,-1,-1,-1,-1,-1,101,-1,-1,-1,-1,-1,100,100,100,100,-1,100,100,100,17,-1,102,104,105,102,101,103 w 15 64 - - 34;-
+info string PFEN loaded successfully
+info string Received: audit_limbo_transition
+info string MATCHED audit_limbo_transition in main.cpp
+info string starting audit_limbo_transition
+info string AUDIT [Depth 1] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1289 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 1] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1289 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1289 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1289 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1290 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 1] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1290 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1290 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1290 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1290 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1290 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1290 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1290 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 1] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1290 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info depth 1 multipv 1 score cp 1295 pv f1d3
+info string DIAGNOSTICS [Depth 1]: Limbo Moves Generated=0 Searched=0 Pruned=0
+info string AUDIT [Depth 2] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1491 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 2] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1353 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1310 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1310 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1491 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1310 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1365 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1321 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1321 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1321 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1321 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1321 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 2] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1321 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info depth 2 multipv 1 score cp 1491 pv b3b3-drop0
+info string DIAGNOSTICS [Depth 2]: Limbo Moves Generated=14 Searched=14 Pruned=0
+info string AUDIT [Depth 3] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1263 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 3] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1263 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 3] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1263 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 3] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1263 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 3] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1271 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 3] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1271 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 3] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1271 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 3] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1272 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 3] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1273 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 3] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1274 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 3] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1275 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 3] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1276 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 3] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1277 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info depth 3 multipv 1 score cp 1345 pv b1a3
+info string DIAGNOSTICS [Depth 3]: Limbo Moves Generated=4731 Searched=4666 Pruned=0
+info string AUDIT [Depth 4] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1343 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1343 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1343 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1343 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1271 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1343 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1343 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1343 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1343 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1343 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1343 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1343 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1343 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1343 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1343 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1343 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1343 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1271 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1343 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1343 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1343 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1343 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1343 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1343 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1343 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 4] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1343 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info depth 4 multipv 1 score cp 1373 pv f1c4
+info string DIAGNOSTICS [Depth 4]: Limbo Moves Generated=7505 Searched=7440 Pruned=0
+info string AUDIT [Depth 5] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1350 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 5] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1350 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1350 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1350 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1350 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1350 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1350 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1350 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1350 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1350 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1350 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1350 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 5] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1350 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info depth 5 multipv 1 score cp 1382 pv f1b5
+info string DIAGNOSTICS [Depth 5]: Limbo Moves Generated=20294 Searched=19035 Pruned=0
+info string AUDIT [Depth 6] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1364 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 6] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1364 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1364 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1364 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1364 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1364 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1364 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1364 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1364 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1364 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1364 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1364 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 6] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1364 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info depth 6 multipv 1 score cp 1375 pv f1b5
+info string DIAGNOSTICS [Depth 6]: Limbo Moves Generated=29902 Searched=28195 Pruned=0
+info string AUDIT [Depth 7] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1365 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1365 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1365 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1365 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1400 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1400 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1400 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1400 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1400 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1400 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1400 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1400 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1400 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1365 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1365 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1365 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1365 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1409 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1409 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1409 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1409 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1409 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1409 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1409 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1409 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 7] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1409 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info depth 7 multipv 1 score cp 1416 pv d2d4
+info string DIAGNOSTICS [Depth 7]: Limbo Moves Generated=77097 Searched=71899 Pruned=0
+info string AUDIT [Depth 8] Limbo Move: b3b3-drop0 | Static Eval: -1289 | Search Eval: 1391 | Rank: 0 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: a8a8-jump0 | Static Eval: -1233 | Search Eval: 1391 | Rank: 1 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: a8a8-jump2 | Static Eval: -1190 | Search Eval: 1391 | Rank: 2 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: a8a8-jump4 | Static Eval: -1190 | Search Eval: 1391 | Rank: 3 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: a8a8-jump5 | Static Eval: -1646 | Search Eval: 1409 | Rank: 4 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: YES
+info string AUDIT [Depth 8] Limbo Move: a8a8-jump6 | Static Eval: -1190 | Search Eval: 1409 | Rank: 5 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: a8a8-jump7 | Static Eval: -1245 | Search Eval: 1409 | Rank: 6 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: h8h8-limbo0dir0 | Static Eval: -1201 | Search Eval: 1409 | Rank: 7 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: h8h8-limbo0dir1 | Static Eval: -1201 | Search Eval: 1409 | Rank: 8 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: h8h8-limbo0dir2 | Static Eval: -1201 | Search Eval: 1409 | Rank: 9 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: h8h8-limbo0dir3 | Static Eval: -1201 | Search Eval: 1409 | Rank: 10 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: h8h8-limbo0dir4 | Static Eval: -1201 | Search Eval: 1409 | Rank: 11 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info string AUDIT [Depth 8] Limbo Move: h8h8-limbo0dir6 | Static Eval: -1201 | Search Eval: 1409 | Rank: 12 | Pruned: NO (Root moves are always searched in PVS) | Entered PV: NO
+info depth 8 multipv 1 score cp 1416 pv d2d4
+info string DIAGNOSTICS [Depth 8]: Limbo Moves Generated=112507 Searched=105854 Pruned=0
+info string --- DECISION EXPLANATION MODE ---
+info string 1. d2d4 (Score: 1416)
+info string   Why d2d4?
+info string   > Material: 0
+info string   > Mobility: -3
+info string   > King Safety: -43
+info string   > Center Control: 0
+info string   > Threats: -15
+info string   > Development: 0
+info string   > Power Potential: 1399
+info string   > TOTAL (Static): 1338 | Engine Classical: -1344
+info string STATS nodes 267820 seldepth 11 tt_hits 27050 beta_cutoffs 32364 lmr_reductions 52857 null_move_prunes 46 qnodes 224837 fail_highs 32364 fail_lows 11283 branching_factor_sum 413812 pv_changes 5
+info depth 1 multipv 1 score cp -1168 pv g8f6
+info string DIAGNOSTICS [Depth 1]: Limbo Moves Generated=0 Searched=0 Pruned=0
+info depth 2 multipv 1 score cp -1365 pv g8f6
+info string DIAGNOSTICS [Depth 2]: Limbo Moves Generated=52 Searched=52 Pruned=0
+info depth 3 multipv 1 score cp -1345 pv e8e7
+info string DIAGNOSTICS [Depth 3]: Limbo Moves Generated=68 Searched=68 Pruned=0
+info depth 4 multipv 1 score cp -1365 pv g8f6
+info string DIAGNOSTICS [Depth 4]: Limbo Moves Generated=930 Searched=930 Pruned=0
+info depth 5 multipv 1 score cp -1365 pv g8f6
+info string DIAGNOSTICS [Depth 5]: Limbo Moves Generated=1753 Searched=1737 Pruned=0
+info depth 6 multipv 1 score cp -1379 pv f8b4
+info string DIAGNOSTICS [Depth 6]: Limbo Moves Generated=18111 Searched=17036 Pruned=0
+info depth 7 multipv 1 score cp -1399 pv f8d6
+info string DIAGNOSTICS [Depth 7]: Limbo Moves Generated=39038 Searched=37148 Pruned=0
+info depth 8 multipv 1 score cp -1400 pv f8d6
+info string DIAGNOSTICS [Depth 8]: Limbo Moves Generated=67546 Searched=64188 Pruned=0
+info string --- DECISION EXPLANATION MODE ---
+info string 1. f8d6 (Score: -1400)
+info string   Why f8d6?
+info string   > Material: 0
+info string   > Mobility: -9
+info string   > King Safety: -61
+info string   > Center Control: -8
+info string   > Threats: 0
+info string   > Development: -7
+info string   > Power Potential: 1286
+info string   > TOTAL (Static): 1201 | Engine Classical: 1209
+info string STATS nodes 178840 seldepth 12 tt_hits 26048 beta_cutoffs 25767 lmr_reductions 20634 null_move_prunes 241 qnodes 223508 fail_highs 25767 fail_lows 6191 branching_factor_sum 228981 pv_changes 4
+{
+  "engineBestMove": "d2d4",
+  "baseStaticEval": 1207,
+  "baseSearchEval": 1416,
+  "drops": [
+    {
+      "move": "b3b3-drop0",
+      "staticEval": -1289,
+      "searchEval": 1400,
+      "bestMoveDelta": -16,
+      "enteredPV": false,
+      "bucketDelta": {
+        "material": 0,
+        "mobility": 0,
+        "kingSafety": -18,
+        "centerControl": 0,
+        "threats": 0,
+        "development": 0,
+        "powerPotential": 106,
+        "total": 88
+      },
+      "tactics": {
+        "check": false,
+        "capture": false
+      },
+      "opportunity": {
+        "legalMoves": 30
+      }
+    }
+  ]
+}
+

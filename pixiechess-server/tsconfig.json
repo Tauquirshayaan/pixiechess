@@ -1,0 +1,36 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // Environment Settings
+    "module": "CommonJS",
+    "target": "ES2022",
+    "rootDir": "..",
+    "outDir": "./dist",
+    "types": ["node"],
+    "esModuleInterop": true,
+    
+    // Other Outputs
+    "sourceMap": true,
+
+    // Recommended Options
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/server.ts",
+    "src/engine/**/*",
+    "src/engine-v2/**/*",
+    "src/data/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/test*",
+    "src/debug*",
+    "src/check*",
+    "src/compare*",
+    "src/trace*",
+    "src/scratch*",
+    "src/fix*"
+  ]
+}

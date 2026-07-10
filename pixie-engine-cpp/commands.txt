@@ -1,0 +1,3 @@
+position startpos
+go depth 1 searchmoves e2e4
+quit
